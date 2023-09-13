@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SignupActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/btnSignupConfirm"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tvSignup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/registration"
+            android:textSize="34sp" />
+
+        <ImageView
+            android:id="@+id/imgSignupShopLogo"
+            android:layout_width="200sp"
+            android:layout_height="200sp"
+            android:layout_marginTop="50dp"
+            android:contentDescription="@string/shop_logo"
+            android:maxWidth="200sp"
+            android:maxHeight="200sp"
+            android:onClick="onSignupShopLogoClicked"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/tvSignupShopLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/shop_logo"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/tvSignupShopName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:text="@string/shop_name" />
+
+        <EditText
+            android:id="@+id/edSignupShopName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="Full name"
+            android:ems="10"
+            android:hint="@string/shop_name"
+            android:inputType="text"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/tvSignupUserEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/email" />
+
+        <EditText
+            android:id="@+id/edSignupUserEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/tvSignupUserCellphone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cellphone_number" />
+
+        <EditText
+            android:id="@+id/edSignupUserCellphone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/cellphone_number"
+            android:inputType="phone"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/tvSignupUserPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/password" />
+
+        <EditText
+            android:id="@+id/edSignupUserPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/tvSignupAlreadySigned"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:onClick="onAlreadySignedClicked"
+            android:text="@string/already_have_an_account"
+            android:textSize="30sp" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnSignupConfirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onSignupClicked"
+        android:text="@string/action_signup"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
