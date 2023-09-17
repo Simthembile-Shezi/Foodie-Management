@@ -1,16 +1,14 @@
 package za.simshezi.foodiemanagement.adapter;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import za.simshezi.foodiemanagement.R;
@@ -70,14 +68,32 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         notifyItemChanged(position);
     }
 
+    public void filterList(ArrayList<OrderModel> filtered) {
+        list = filtered;
+        notifyDataSetChanged();
+    }
+
     public static class OrderViewHolder extends RecyclerView.ViewHolder{
         private OrderModel model;
+        private TextView tvOrderNo, tvName, tvPayment, tvPrice, tvTime, tvItems;
         public OrderViewHolder(@NonNull View itemView) {
             super(itemView);
+            tvOrderNo = itemView.findViewById(R.id.tvOrderNumber);
+            tvName = itemView.findViewById(R.id.tvCustomerName);
+            tvPayment = itemView.findViewById(R.id.tvOrderPayment);
+            tvPrice = itemView.findViewById(R.id.tvOrderPrice);
+            tvTime = itemView.findViewById(R.id.tvOrderTime);
+            tvItems = itemView.findViewById(R.id.tvOrderItems);
         }
 
         public void setOrder(OrderModel model) {
             this.model = model;
+            tvName.setText(model.getCustomerName());
+            tvOrderNo.setText(model.getOrderId());
+            tvTime.setText(model.getCollectionTime());
+            tvPayment.setText(model.getPaymentType());
+            tvItems.setText(String.format("%d items", model.getItems()));
+            tvPrice.setText(String.format("R %s", model.getPrice()));
         }
     }
 }

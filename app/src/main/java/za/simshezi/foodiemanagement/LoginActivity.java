@@ -2,7 +2,9 @@ package za.simshezi.foodiemanagement;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -27,7 +29,7 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         edEmail = findViewById(R.id.edLoginEmail);
         edPassword = findViewById(R.id.edLoginPassword);
-        FirebaseApp.initializeApp(this);
+
     }
 
     public void onForgotPasswordClicked(View view) {
@@ -41,6 +43,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onLoginClicked(View view) {
+
+        //startActivity(new Intent(this, MainActivity.class));
         //Simshezi8@gmail.com SimShezi
         String email = edEmail.getText().toString().trim();
         String password = edPassword.getText().toString().trim();
@@ -55,32 +59,18 @@ public class LoginActivity extends AppCompatActivity {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(LoginActivity.this, task -> {
                     if (task.isSuccessful()) {
+                        SharedPreferences writePreferences = getSharedPreferences("login", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = writePreferences.edit();
+                        editor.putString("email", email);
+                        editor.putString("password", password);
+                        editor.apply();
                         FirebaseUser user = mAuth.getCurrentUser();
-                        FirebaseAPI api = FirebaseAPI.getInstance();
-                        if(user != null){
-                            api.getShop(user.getEmail(), documentSnapshot -> {
-                                        if (documentSnapshot != null && documentSnapshot.exists()) {
-                                            String id = documentSnapshot.getId();
-                                            String name = documentSnapshot.getString("name");
-                                            String cellphone = documentSnapshot.getString("cellphone");
-                                            boolean status = documentSnapshot.getBoolean("status");
-                                            double rating = documentSnapshot.getDouble("rating");
-                                            api.getShopLogo(id, bytes ->{
-                                                if(bytes != null){
-                                                    Intent intent = new Intent(this, MainActivity.class);
-                                                    ShopModel model = new ShopModel(name, user.getEmail(), cellphone, (float) rating, status, bytes);
-                                                    model.setId(id);
-                                                    intent.putExtra("user", model);
-                                                    startActivity(intent);
-                                                }
-                                            });
-                                        }
-                                    }
-                            );
-                        }
+                        Intent intent = new Intent(this, MainActivity.class);
+                        intent.putExtra("user", user);
+                        startActivity(intent);
                     } else {
                         // Login failed
-                        Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, "Login failed.", Toast.LENGTH_SHORT).show();
                     }
                 });
     }

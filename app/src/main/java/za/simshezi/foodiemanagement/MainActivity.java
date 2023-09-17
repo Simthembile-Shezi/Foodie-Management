@@ -1,5 +1,6 @@
 package za.simshezi.foodiemanagement;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,11 +10,15 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -24,39 +29,63 @@ import za.simshezi.foodiemanagement.api.FirebaseAPI;
 import za.simshezi.foodiemanagement.api.ImagesAPI;
 import za.simshezi.foodiemanagement.model.ShopModel;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener {
     public static final int PROFILE_REQ = 2000;
-    private TextView tvShopName;
+    private int finish = 0;
+    private BottomNavigationView bottomNavigationView;
+    private HomeFragment homeFragment = new HomeFragment();
+    private MenuFragment menuFragment = new MenuFragment();
+    private OrdersFragment ordersFragment = new OrdersFragment();
+    private ProfileFragment profileFragment = new ProfileFragment();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        tvShopName = findViewById(R.id.tvMainShopName);
-
-        Intent data = getIntent();
-        ShopModel user = (ShopModel) data.getSerializableExtra("user");
-        if (user != null) {
-            tvShopName.setText(user.getName());
-        }
+        bottomNavigationView = findViewById(R.id.bottom_nav_view);
+        bottomNavigationView.setOnItemSelectedListener(this);
+        bottomNavigationView.setSelectedItemId(R.id.current_orders_dest);
     }
 
-    public void onProfileClicked(View view) {
-        Intent data = getIntent();
-        ShopModel user = (ShopModel) data.getSerializableExtra("user");
-        if (user != null) {
-            Intent intent = new Intent(this, ProfileActivity.class);
-            intent.putExtra("user", user);
-            startActivityForResult(intent, PROFILE_REQ);
-        }
-    }
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK && requestCode == PROFILE_REQ && data != null) {
-            ShopModel model = (ShopModel) data.getSerializableExtra("user");
-            if (model != null) {
-                tvShopName.setText(model.getName());
-            }
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        finish = 0;
+        int itemId = item.getItemId();
+        if (itemId == R.id.current_orders_dest) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.flFragment, homeFragment)
+                    .commit();
+            return true;
+        }else if (itemId == R.id.previous_orders_dest) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.flFragment, ordersFragment)
+                    .commit();
+            return true;
+        } else if (itemId == R.id.manage_menu_dest) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.flFragment, menuFragment)
+                    .commit();
+            return true;
+        } else if (itemId == R.id.profile_dest) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.flFragment, profileFragment)
+                    .commit();
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish++;
+        if(finish == 2) {
+            finishAffinity();
+        }else {
+            Toast.makeText(this, "Press back again to exit the app", Toast.LENGTH_SHORT).show();
         }
     }
 }
