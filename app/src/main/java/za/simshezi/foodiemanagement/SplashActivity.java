@@ -10,8 +10,12 @@ import android.os.Bundle;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import za.simshezi.foodiemanagement.api.FirebaseAPI;
+import za.simshezi.foodiemanagement.model.ShopModel;
+
 public class SplashActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,17 +26,25 @@ public class SplashActivity extends AppCompatActivity {
         SharedPreferences readPreferences = getSharedPreferences("login", Context.MODE_PRIVATE);
         String email = readPreferences.getString("email", "");
         String password = readPreferences.getString("password", "");
-        if(!email.equals("") && !password.equals("")) {
+        if (!email.equals("") && !password.equals("")) {
             mAuth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener(SplashActivity.this, task -> {
                         if (task.isSuccessful()) {
                             FirebaseUser user = mAuth.getCurrentUser();
-                            Intent intent = new Intent(this, MainActivity.class);
-                            intent.putExtra("user", user);
-                            startActivity(intent);
+                            if (user != null) {
+                                FirebaseAPI.getInstance().getShop(user.getEmail(), (document) -> {
+                                    Intent intent = new Intent(this, MainActivity.class);
+                                    if (document != null) {
+                                        ShopModel model = new ShopModel(document.getId(), document.getString("name"), document.getString("email"), document.getString("cellphone"),
+                                                document.getString("address"), document.getString("status"), document.getDouble("rating"));
+                                        intent.putExtra("shop", model);
+                                    }
+                                    startActivity(intent);
+                                });
+                            }
                         }
                     });
-        }else {
+        } else {
             startActivity(new Intent(this, LoginActivity.class));
         }
     }

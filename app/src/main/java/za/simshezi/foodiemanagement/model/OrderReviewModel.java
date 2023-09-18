@@ -1,17 +1,19 @@
 package za.simshezi.foodiemanagement.model;
 
+import com.google.firebase.Timestamp;
+
 public class OrderReviewModel {
-    private String orderId;
+    private String shopId;
     private String customerName;
     private String paymentType;
-    private String date;
+    private Timestamp date;
     private String review;
-    private int rating;
-    private int items;
-    private float price;
+    private Integer rating;
+    private Integer items;
+    private Double price;
 
-    public OrderReviewModel(String orderId, String customerName, String paymentType, String date, String review, int rating, int items, float price) {
-        this.orderId = orderId;
+    public OrderReviewModel(String shopId, String customerName, String paymentType, Timestamp date, String review, Integer rating, Integer items, Double price) {
+        this.shopId = shopId;
         this.customerName = customerName;
         this.paymentType = paymentType;
         this.date = date;
@@ -21,12 +23,12 @@ public class OrderReviewModel {
         this.price = price;
     }
 
-    public String getOrderId() {
-        return orderId;
+    public String getShopId() {
+        return shopId;
     }
 
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
+    public void setShopId(String shopId) {
+        this.shopId = shopId;
     }
 
     public String getCustomerName() {
@@ -45,11 +47,11 @@ public class OrderReviewModel {
         this.paymentType = paymentType;
     }
 
-    public String getDate() {
+    public Timestamp getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Timestamp date) {
         this.date = date;
     }
 
@@ -61,27 +63,27 @@ public class OrderReviewModel {
         this.review = review;
     }
 
-    public int getRating() {
+    public Integer getRating() {
         return rating;
     }
 
-    public void setRating(int rating) {
+    public void setRating(Integer rating) {
         this.rating = rating;
     }
 
-    public int getItems() {
+    public Integer getItems() {
         return items;
     }
 
-    public void setItems(int items) {
+    public void setItems(Integer items) {
         this.items = items;
     }
 
-    public float getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 }

@@ -46,10 +46,9 @@ public class ProfileActivity extends AppCompatActivity {
         edCellphone = findViewById(R.id.edProfileUserCellphone);
 
         Intent intent = getIntent();
-        ShopModel model = (ShopModel) intent.getSerializableExtra("user");
+        ShopModel model = (ShopModel) intent.getSerializableExtra("shop");
         if (model != null) {
             imgShopLogo.setImageBitmap(ImagesAPI.convertToBitmap(model.getImage()));
-            statusSwitch.setChecked(model.isStatus());
             edName.setText(model.getName());
             edCellphone.setText(model.getCellphone());
             id = model.getId();
@@ -70,11 +69,11 @@ public class ProfileActivity extends AppCompatActivity {
             Toast.makeText(this, "Choose a picture for your shop", Toast.LENGTH_SHORT).show();
         } else {
 
-            ShopModel model = new ShopModel(name, id, cellphone, statusSwitch.isChecked(), image);
+            ShopModel model = new ShopModel(name, id, cellphone, "Open", image);
             FirebaseAPI.getInstance().editShop(model, bool -> {
                 if (bool) {
                     Intent intent = new Intent();
-                    intent.putExtra("user", model);
+                    intent.putExtra("shop", model);
                     setResult(MainActivity.PROFILE_REQ);
                     finish();
                 }

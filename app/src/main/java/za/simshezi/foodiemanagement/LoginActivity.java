@@ -65,9 +65,15 @@ public class LoginActivity extends AppCompatActivity {
                         editor.putString("password", password);
                         editor.apply();
                         FirebaseUser user = mAuth.getCurrentUser();
-                        Intent intent = new Intent(this, MainActivity.class);
-                        intent.putExtra("user", user);
-                        startActivity(intent);
+                        if(user != null) {
+                            FirebaseAPI.getInstance().getShop(user.getEmail(), (document) -> {
+                                ShopModel model = new ShopModel(document.getId(),document.getString("name"), document.getString("email"), document.getString("cellphone"),
+                                        document.getString("address"), document.getString("status"), document.getDouble("rating"));
+                                Intent intent = new Intent(this, MainActivity.class);
+                                intent.putExtra("shop", model);
+                                startActivity(intent);
+                            });
+                        }
                     } else {
                         // Login failed
                         Toast.makeText(LoginActivity.this, "Login failed.", Toast.LENGTH_SHORT).show();

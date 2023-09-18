@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import za.simshezi.foodiemanagement.R;
+import za.simshezi.foodiemanagement.api.TimestampAPI;
 import za.simshezi.foodiemanagement.model.OrderReviewModel;
 
 public class OrderReviewAdapter extends RecyclerView.Adapter<OrderReviewAdapter.OrderReviewViewHolder> {
@@ -63,8 +64,7 @@ public class OrderReviewAdapter extends RecyclerView.Adapter<OrderReviewAdapter.
         public void setOrderReview(OrderReviewModel model) {
             this.model = model;
             tvName.setText(model.getCustomerName());
-            tvOrderNo.setText(model.getOrderId());
-            tvTime.setText(model.getDate());
+            tvTime.setText(TimestampAPI.getDate(model.getDate()));
             tvPayment.setText(model.getPaymentType());
             tvReview.setText(model.getReview());
             tvRating.setText(String.format("%d", model.getRating()));

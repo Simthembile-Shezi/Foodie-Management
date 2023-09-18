@@ -72,7 +72,7 @@ public class SignupActivity extends AppCompatActivity {
             Toast.makeText(this, "Choose a picture for your shop", Toast.LENGTH_SHORT).show();
         } else {
 
-            ShopModel model = new ShopModel(name, email, cellphone, 0.0f, false, image);
+            ShopModel model = new ShopModel(name, email, cellphone, 0.0, "Open", image);
             mAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(SignupActivity.this, task -> {
                         if (task.isSuccessful()) {

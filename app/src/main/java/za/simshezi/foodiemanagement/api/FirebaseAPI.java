@@ -16,8 +16,10 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import za.simshezi.foodiemanagement.model.OrderModel;
 import za.simshezi.foodiemanagement.model.ShopModel;
 
 public class FirebaseAPI {
@@ -25,6 +27,7 @@ public class FirebaseAPI {
     private FirebaseStorage storage;
     private StorageReference storageRef;
     private CollectionReference restaurantsCollection;
+    private CollectionReference ordersCollection;
     private static FirebaseAPI firebase;
 
     private FirebaseAPI() {
@@ -32,6 +35,7 @@ public class FirebaseAPI {
         storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference();
         restaurantsCollection = db.collection("restaurants");
+        ordersCollection = db.collection("orders");
     }
 
     public static FirebaseAPI getInstance() {
@@ -46,7 +50,7 @@ public class FirebaseAPI {
         user.put("name", model.getName());
         user.put("cellphone", model.getCellphone());
         user.put("email", model.getEmail());
-        user.put("status", model.isStatus());
+        user.put("status", model.getStatus());
         user.put("rating", model.getRating());
 
         restaurantsCollection.add(user)
@@ -70,7 +74,7 @@ public class FirebaseAPI {
         Map<String, Object> user = new HashMap<>();
         user.put("name", model.getName());
         user.put("cellphone", model.getCellphone());
-        user.put("status", model.isStatus());
+        user.put("status", model.getStatus());
 
         DocumentReference documentRef = restaurantsCollection.document(model.getId());
         documentRef.set(user, SetOptions.merge())
@@ -114,5 +118,21 @@ public class FirebaseAPI {
         imageRef.getBytes(MAX_DOWNLOAD_SIZE)
                 .addOnSuccessListener(bytes -> callback.onSuccess(bytes))
                 .addOnFailureListener(exception -> callback.onSuccess(null));
+    }
+
+    public void getOrders(String shopID, OnSuccessListener<QuerySnapshot> callback) {
+        Query query = ordersCollection.whereEqualTo("shopId", shopID);
+        query.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                QuerySnapshot querySnapshot = task.getResult();
+                if (querySnapshot != null && !querySnapshot.isEmpty()) {
+                    callback.onSuccess(querySnapshot);
+                } else {
+                    callback.onSuccess(null); // No matching documents found
+                }
+            } else {
+                callback.onSuccess(null); // Handle the failure
+            }
+        });
     }
 }

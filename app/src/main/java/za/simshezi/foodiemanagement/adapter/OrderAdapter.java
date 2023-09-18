@@ -8,10 +8,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.type.DateTime;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import za.simshezi.foodiemanagement.R;
+import za.simshezi.foodiemanagement.api.TimestampAPI;
 import za.simshezi.foodiemanagement.model.OrderModel;
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHolder> {
@@ -75,10 +78,9 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
     public static class OrderViewHolder extends RecyclerView.ViewHolder{
         private OrderModel model;
-        private TextView tvOrderNo, tvName, tvPayment, tvPrice, tvTime, tvItems;
+        private TextView tvName, tvPayment, tvPrice, tvTime, tvItems;
         public OrderViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvOrderNo = itemView.findViewById(R.id.tvOrderNumber);
             tvName = itemView.findViewById(R.id.tvCustomerName);
             tvPayment = itemView.findViewById(R.id.tvOrderPayment);
             tvPrice = itemView.findViewById(R.id.tvOrderPrice);
@@ -88,11 +90,10 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
         public void setOrder(OrderModel model) {
             this.model = model;
-            tvName.setText(model.getCustomerName());
-            tvOrderNo.setText(model.getOrderId());
-            tvTime.setText(model.getCollectionTime());
-            tvPayment.setText(model.getPaymentType());
-            tvItems.setText(String.format("%d items", model.getItems()));
+            tvName.setText(model.getCustomer());
+            tvTime.setText(String.format("%s", TimestampAPI.getTime(model.getTime())));
+            tvPayment.setText(model.getPayment());
+            tvItems.setText(String.format("%s items", model.getItems()));
             tvPrice.setText(String.format("R %s", model.getPrice()));
         }
     }
