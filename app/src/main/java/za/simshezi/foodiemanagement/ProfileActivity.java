@@ -32,7 +32,7 @@ public class ProfileActivity extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_CODE = 158;
     private ImageView imgShopLogo;
     private Switch statusSwitch;
-    private EditText edName, edCellphone;
+    private EditText edName, edAddress, edCellphone;
     private byte[] image = null;
     private String id;
 
@@ -43,6 +43,7 @@ public class ProfileActivity extends AppCompatActivity {
         imgShopLogo = findViewById(R.id.imgProfileShopLogo);
         statusSwitch = findViewById(R.id.switchProfileStatus);
         edName = findViewById(R.id.edProfileShopName);
+        edAddress = findViewById(R.id.edProfileShopAddress);
         edCellphone = findViewById(R.id.edProfileUserCellphone);
 
         Intent intent = getIntent();
@@ -60,16 +61,19 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void onProfileConfirmClicked(View view) {
         String name = edName.getText().toString().trim();
+        String address = edAddress.getText().toString().trim();
         String cellphone = edCellphone.getText().toString().trim();
         if (TextUtils.isEmpty(name)) {
             Toast.makeText(this, "Enter full name", Toast.LENGTH_SHORT).show();
-        } else if (TextUtils.isEmpty(cellphone)) {
+        } else if (TextUtils.isEmpty(address)) {
+            Toast.makeText(this, "Enter address", Toast.LENGTH_SHORT).show();
+        }  else if (TextUtils.isEmpty(cellphone)) {
             Toast.makeText(this, "Enter cellphone number", Toast.LENGTH_SHORT).show();
         } else if (image == null) {
             Toast.makeText(this, "Choose a picture for your shop", Toast.LENGTH_SHORT).show();
         } else {
 
-            ShopModel model = new ShopModel(name, id, cellphone, "Open", image);
+            ShopModel model = new ShopModel(name, cellphone , address, image);
             FirebaseAPI.getInstance().editShop(model, bool -> {
                 if (bool) {
                     Intent intent = new Intent();

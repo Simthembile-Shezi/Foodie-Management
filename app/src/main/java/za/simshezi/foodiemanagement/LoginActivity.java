@@ -67,8 +67,9 @@ public class LoginActivity extends AppCompatActivity {
                         FirebaseUser user = mAuth.getCurrentUser();
                         if(user != null) {
                             FirebaseAPI.getInstance().getShop(user.getEmail(), (document) -> {
-                                ShopModel model = new ShopModel(document.getId(),document.getString("name"), document.getString("email"), document.getString("cellphone"),
-                                        document.getString("address"), document.getString("status"), document.getDouble("rating"));
+                                ShopModel model = document.toObject(ShopModel.class);
+                                assert model != null;
+                                model.setId(document.getId());
                                 Intent intent = new Intent(this, MainActivity.class);
                                 intent.putExtra("shop", model);
                                 startActivity(intent);

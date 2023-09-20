@@ -6,6 +6,7 @@ import com.google.type.DateTime;
 public class OrderModel {
     private String shopId;
     private String customer;
+    private String cellphone;
     private String payment;
     private Timestamp time;
     private Integer items;
@@ -14,9 +15,10 @@ public class OrderModel {
     public OrderModel() {
     }
 
-    public OrderModel(String shopId, String customer, String payment, Timestamp time, Integer items, Double price) {
+    public OrderModel(String shopId, String customer, String cellphone, String payment, Timestamp time, Integer items, Double price) {
         this.shopId = shopId;
         this.customer = customer;
+        this.cellphone = cellphone;
         this.payment = payment;
         this.time = time;
         this.items = items;
@@ -37,6 +39,14 @@ public class OrderModel {
 
     public void setCustomer(String customer) {
         this.customer = customer;
+    }
+
+    public String getCellphone() {
+        return cellphone;
+    }
+
+    public void setCellphone(String cellphone) {
+        this.cellphone = cellphone;
     }
 
     public String getPayment() {

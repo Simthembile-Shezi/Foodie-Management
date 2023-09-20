@@ -23,9 +23,8 @@
 
         <ImageView
             android:id="@+id/imgSignupShopLogo"
-            android:layout_width="200sp"
-            android:layout_height="200sp"
-            android:layout_marginTop="50dp"
+            android:layout_width="100sp"
+            android:layout_height="100sp"
             android:contentDescription="@string/shop_logo"
             android:maxWidth="200sp"
             android:maxHeight="200sp"
@@ -53,6 +52,23 @@
             android:autofillHints="Full name"
             android:ems="10"
             android:hint="@string/shop_name"
+            android:inputType="text"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/tvSignupAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:text="Address" />
+
+        <EditText
+            android:id="@+id/edSignupAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="Address"
+            android:ems="10"
+            android:hint="Address"
             android:inputType="text"
             android:textSize="20sp" />
 

@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.List;
 
 public class ShopModel implements Serializable {
-    private String name;
     private String id;
+    private String name;
     private String email;
     private String cellphone;
     private Double rating;
@@ -13,31 +13,32 @@ public class ShopModel implements Serializable {
     private String address;
     private byte[] image;
 
-    public ShopModel(String name, String email, String cellphone, Double rating, String status, byte[] image) {
-        this.name = name;
-        this.email = email;
-        this.cellphone = cellphone;
-        this.rating = rating;
-        this.status = status;
-        this.image = image;
+    public ShopModel() {
     }
 
-    public ShopModel(String name, String id, String cellphone, String status, byte[] image) {
-        this.name = name;
-        this.id = id;
-        this.cellphone = cellphone;
-        this.status = status;
-        this.image = image;
-    }
-
-    public ShopModel(String id, String name, String email, String cellphone, String address, String status, Double rating) {
-        this.id = id;
+    public ShopModel(String name, String email, String cellphone, Double rating, String status, String address, byte[] image) {
         this.name = name;
         this.email = email;
         this.cellphone = cellphone;
         this.rating = rating;
         this.status = status;
         this.address = address;
+        this.image = image;
+    }
+
+    public ShopModel(String name, String cellphone, String address, byte[] image) {
+        this.name = name;
+        this.cellphone = cellphone;
+        this.address = address;
+        this.image = image;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -46,22 +47,6 @@ public class ShopModel implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Double getRating() {
-        return rating;
-    }
-
-    public void setRating(Double rating) {
-        this.rating = rating;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public String getEmail() {
@@ -80,6 +65,30 @@ public class ShopModel implements Serializable {
         this.cellphone = cellphone;
     }
 
+    public Double getRating() {
+        return rating;
+    }
+
+    public void setRating(Double rating) {
+        this.rating = rating;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     public byte[] getImage() {
         return image;
     }
@@ -87,15 +96,5 @@ public class ShopModel implements Serializable {
     public void setImage(byte[] image) {
         this.image = image;
     }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-
 }
 

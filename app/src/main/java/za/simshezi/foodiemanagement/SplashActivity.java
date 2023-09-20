@@ -35,8 +35,9 @@ public class SplashActivity extends AppCompatActivity {
                                 FirebaseAPI.getInstance().getShop(user.getEmail(), (document) -> {
                                     Intent intent = new Intent(this, MainActivity.class);
                                     if (document != null) {
-                                        ShopModel model = new ShopModel(document.getId(), document.getString("name"), document.getString("email"), document.getString("cellphone"),
-                                                document.getString("address"), document.getString("status"), document.getDouble("rating"));
+                                        ShopModel model = document.toObject(ShopModel.class);
+                                        assert model != null;
+                                        model.setId(document.getId());
                                         intent.putExtra("shop", model);
                                     }
                                     startActivity(intent);

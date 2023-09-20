@@ -34,7 +34,7 @@ public class SignupActivity extends AppCompatActivity {
     private static final int GALLERY_REQUEST_CODE = 159;
     private static final int PERMISSION_REQUEST_CODE = 158;
     private ImageView imgShopLogo;
-    private EditText edName, edEmail, edCellphone, edPassword;
+    private EditText edName, edEmail, edAddress, edCellphone, edPassword;
     private byte[] image = null;
 
     @Override
@@ -44,6 +44,7 @@ public class SignupActivity extends AppCompatActivity {
         imgShopLogo = findViewById(R.id.imgSignupShopLogo);
         edName = findViewById(R.id.edSignupShopName);
         edEmail = findViewById(R.id.edSignupUserEmail);
+        edAddress = findViewById(R.id.edSignupAddress);
         edCellphone = findViewById(R.id.edSignupUserCellphone);
         edPassword = findViewById(R.id.edSignupUserPassword);
 
@@ -58,10 +59,13 @@ public class SignupActivity extends AppCompatActivity {
     public void onSignupClicked(View view) {
         String name = edName.getText().toString().trim();
         String email = edEmail.getText().toString().trim();
+        String address = edAddress.getText().toString().trim();
         String cellphone = edCellphone.getText().toString().trim();
         String password = edPassword.getText().toString().trim();
         if (TextUtils.isEmpty(name)) {
             Toast.makeText(this, "Enter full name", Toast.LENGTH_SHORT).show();
+        } else if (TextUtils.isEmpty(address)) {
+            Toast.makeText(this, "Enter address", Toast.LENGTH_SHORT).show();
         } else if (TextUtils.isEmpty(email)) {
             Toast.makeText(this, "Enter email address", Toast.LENGTH_SHORT).show();
         } else if (TextUtils.isEmpty(cellphone)) {
@@ -71,8 +75,7 @@ public class SignupActivity extends AppCompatActivity {
         } else if (image == null) {
             Toast.makeText(this, "Choose a picture for your shop", Toast.LENGTH_SHORT).show();
         } else {
-
-            ShopModel model = new ShopModel(name, email, cellphone, 0.0, "Open", image);
+            ShopModel model = new ShopModel(name, email, cellphone, 0.0, "Closed", address, image);
             mAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(SignupActivity.this, task -> {
                         if (task.isSuccessful()) {

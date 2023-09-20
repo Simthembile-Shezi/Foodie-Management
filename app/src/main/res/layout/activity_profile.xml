@@ -69,6 +69,22 @@
             android:hint="@string/shop_name"
             android:inputType="text"
             android:textSize="20sp" />
+        <TextView
+            android:id="@+id/tvProfileShopAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:text="Address" />
+
+        <EditText
+            android:id="@+id/edProfileShopAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="Address"
+            android:ems="10"
+            android:hint="Address"
+            android:inputType="text"
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/tvProfileUserCellphone"

@@ -24,7 +24,6 @@ import java.util.List;
 
 import za.simshezi.foodiemanagement.adapter.OrderAdapter;
 import za.simshezi.foodiemanagement.api.FirebaseAPI;
-import za.simshezi.foodiemanagement.mock.OrdersData;
 import za.simshezi.foodiemanagement.model.OrderModel;
 import za.simshezi.foodiemanagement.model.ShopModel;
 
@@ -36,6 +35,7 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
     private OrderAdapter adapter;
     private List<OrderModel> list;
     private FirebaseAPI api;
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -68,17 +68,19 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
                         OrderModel model = document.toObject(OrderModel.class);
                         list.add(model);
                     }
-                    adapter = new OrderAdapter(list, (view -> {
+                    if(DocumentSnapshot.size() == list.size()){
+                        adapter = new OrderAdapter(list, (view -> {
 
-                    }));
-                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-                    lstCurrentOrders.setAdapter(adapter);
-                    lstCurrentOrders.setLayoutManager(layoutManager);
+                        }));
+                        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+                        lstCurrentOrders.setAdapter(adapter);
+                        lstCurrentOrders.setLayoutManager(layoutManager);
 
-                    searchView.setOnQueryTextListener(HomeFragment.this);
+                        searchView.setOnQueryTextListener(HomeFragment.this);
 
-                    layoutNoOrders.setVisibility(View.GONE);
-                    layoutOrders.setVisibility(View.VISIBLE);
+                        layoutNoOrders.setVisibility(View.GONE);
+                        layoutOrders.setVisibility(View.VISIBLE);
+                    }
                 }else {
                     layoutOrders.setVisibility(View.GONE);
                     layoutNoOrders.setVisibility(View.VISIBLE);
