@@ -28,6 +28,7 @@ import za.simshezi.foodiemanagement.model.OrderModel;
 import za.simshezi.foodiemanagement.model.ShopModel;
 
 public class HomeFragment extends Fragment implements SearchView.OnQueryTextListener{
+    public static final int HOME_REQ = 0;
     private RecyclerView lstCurrentOrders;
     private ConstraintLayout layoutOrders, layoutNoOrders;
     private SearchView searchView;
@@ -58,9 +59,9 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
 
     private void build() {
         Intent intent = requireActivity().getIntent();
-        if(intent != null){
+        ShopModel shop = (ShopModel) intent.getSerializableExtra("shop");
+        if(shop != null){
             list = new ArrayList<>();
-            ShopModel shop = (ShopModel) intent.getSerializableExtra("shop");
             api = FirebaseAPI.getInstance();
             api.getOrders(shop.getId(), (DocumentSnapshot)->{
                 if(DocumentSnapshot != null){

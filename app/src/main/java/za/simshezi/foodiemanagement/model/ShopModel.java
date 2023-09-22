@@ -12,11 +12,13 @@ public class ShopModel implements Serializable {
     private String status;
     private String address;
     private byte[] image;
+    private int dest;
 
     public ShopModel() {
     }
 
-    public ShopModel(String name, String email, String cellphone, Double rating, String status, String address, byte[] image) {
+    public ShopModel(String id, String name, String email, String cellphone, Double rating, String status, String address, byte[] image) {
+        this.id = id;
         this.name = name;
         this.email = email;
         this.cellphone = cellphone;
@@ -26,8 +28,9 @@ public class ShopModel implements Serializable {
         this.image = image;
     }
 
-    public ShopModel(String name, String cellphone, String address, byte[] image) {
+    public ShopModel(String name, String email, String cellphone, String address, byte[] image) {
         this.name = name;
+        this.email = email;
         this.cellphone = cellphone;
         this.address = address;
         this.image = image;
@@ -95,6 +98,14 @@ public class ShopModel implements Serializable {
 
     public void setImage(byte[] image) {
         this.image = image;
+    }
+
+    public int getDest() {
+        return dest;
+    }
+
+    public void setDest(int dest) {
+        this.dest = dest;
     }
 }
 

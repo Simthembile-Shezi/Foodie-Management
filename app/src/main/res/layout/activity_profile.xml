@@ -4,12 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/theme"
     tools:context=".ProfileActivity">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/btnProfileEditConfirm"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -30,7 +34,7 @@
             android:maxWidth="200sp"
             android:maxHeight="200sp"
             android:onClick="onProfileShopLogoClicked"
-            tools:srcCompat="@tools:sample/avatars" />
+            tools:srcCompat="@drawable/icon" />
 
         <TextView
             android:id="@+id/tvProfileShopLogo"
@@ -47,7 +51,7 @@
 
         <Switch
             android:id="@+id/switchProfileStatus"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minHeight="48dp"
             android:text="@string/open"
@@ -57,7 +61,6 @@
             android:id="@+id/tvProfileShopName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
             android:text="@string/shop_name" />
 
         <EditText
@@ -69,11 +72,11 @@
             android:hint="@string/shop_name"
             android:inputType="text"
             android:textSize="20sp" />
+
         <TextView
             android:id="@+id/tvProfileShopAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
             android:text="Address" />
 
         <EditText
@@ -105,8 +108,11 @@
 
     <Button
         android:id="@+id/btnProfileEditConfirm"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
         android:onClick="onProfileConfirmClicked"
         android:text="@string/confirm"
         app:layout_constraintBottom_toBottomOf="parent"

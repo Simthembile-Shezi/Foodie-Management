@@ -8,13 +8,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.type.DateTime;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import za.simshezi.foodiemanagement.R;
-import za.simshezi.foodiemanagement.api.TimestampAPI;
+import za.simshezi.foodiemanagement.api.JavaAPI;
 import za.simshezi.foodiemanagement.model.OrderModel;
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHolder> {
@@ -91,10 +89,10 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         public void setOrder(OrderModel model) {
             this.model = model;
             tvName.setText(model.getCustomer());
-            tvTime.setText(String.format("%s", TimestampAPI.getTime(model.getTime())));
+            tvTime.setText(String.format("%s", JavaAPI.getTime(model.getTime())));
             tvPayment.setText(model.getPayment());
             tvItems.setText(String.format("%s items", model.getItems()));
-            tvPrice.setText(String.format("R %s", model.getPrice()));
+            tvPrice.setText(String.format("R %s", JavaAPI.formatDouble(model.getPrice())));
         }
     }
 }

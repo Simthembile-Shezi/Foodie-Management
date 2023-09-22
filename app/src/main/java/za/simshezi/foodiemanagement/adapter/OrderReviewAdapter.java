@@ -11,15 +11,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import za.simshezi.foodiemanagement.R;
-import za.simshezi.foodiemanagement.api.TimestampAPI;
-import za.simshezi.foodiemanagement.model.OrderReviewModel;
+import za.simshezi.foodiemanagement.api.JavaAPI;
+import za.simshezi.foodiemanagement.model.OrderModel;
 
 public class OrderReviewAdapter extends RecyclerView.Adapter<OrderReviewAdapter.OrderReviewViewHolder> {
-    public OrderReviewModel model;
-    private List<OrderReviewModel> list;
+    public OrderModel model;
+    private List<OrderModel> list;
     private View.OnClickListener onClickListener;
 
-    public OrderReviewAdapter(List<OrderReviewModel> list, View.OnClickListener onClickListener) {
+    public OrderReviewAdapter(List<OrderModel> list, View.OnClickListener onClickListener) {
         this.list = list;
         this.onClickListener = onClickListener;
     }
@@ -34,7 +34,7 @@ public class OrderReviewAdapter extends RecyclerView.Adapter<OrderReviewAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull OrderReviewAdapter.OrderReviewViewHolder holder, int position) {
-        OrderReviewModel model = list.get(position);
+        OrderModel model = list.get(position);
         holder.setOrderReview(model);
         holder.itemView.setOnClickListener((view -> {
             this.model = list.get(position);
@@ -48,11 +48,11 @@ public class OrderReviewAdapter extends RecyclerView.Adapter<OrderReviewAdapter.
     }
 
     public static class OrderReviewViewHolder extends RecyclerView.ViewHolder {
-        private OrderReviewModel model;
-        private TextView tvOrderNo, tvName, tvPayment, tvPrice, tvTime, tvItems, tvRating, tvReview;
+        private OrderModel model;
+        private TextView tvOrderCellphoneNo, tvName, tvPayment, tvPrice, tvTime, tvItems, tvRating, tvReview;
         public OrderReviewViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvOrderNo = itemView.findViewById(R.id.tvReviewOrderNumber);
+            tvOrderCellphoneNo = itemView.findViewById(R.id.tvReviewOrderCellphone);
             tvName = itemView.findViewById(R.id.tvReviewCustomerName);
             tvPayment = itemView.findViewById(R.id.tvReviewOrderPayment);
             tvPrice = itemView.findViewById(R.id.tvReviewOrderPrice);
@@ -61,15 +61,16 @@ public class OrderReviewAdapter extends RecyclerView.Adapter<OrderReviewAdapter.
             tvRating = itemView.findViewById(R.id.tvReviewOrderRating);
             tvReview = itemView.findViewById(R.id.tvReviewOrderDetails);
         }
-        public void setOrderReview(OrderReviewModel model) {
+        public void setOrderReview(OrderModel model) {
             this.model = model;
-            tvName.setText(model.getCustomerName());
-            tvTime.setText(TimestampAPI.getDate(model.getDate()));
-            tvPayment.setText(model.getPaymentType());
+            tvOrderCellphoneNo.setText(model.getCellphone());
+            tvName.setText(model.getCustomer());
+            tvTime.setText(JavaAPI.getDate(model.getTime()));
+            tvPayment.setText(model.getPayment());
             tvReview.setText(model.getReview());
             tvRating.setText(String.format("%d", model.getRating()));
             tvItems.setText(String.format("%d items", model.getItems()));
-            tvPrice.setText(String.format("R %s", model.getPrice()));
+            tvPrice.setText(String.format("R %s", JavaAPI.formatDouble(model.getPrice())));
         }
     }
 }

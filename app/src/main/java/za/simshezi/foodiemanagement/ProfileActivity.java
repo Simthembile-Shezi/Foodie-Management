@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -31,10 +32,11 @@ public class ProfileActivity extends AppCompatActivity {
     private static final int GALLERY_REQUEST_CODE = 159;
     private static final int PERMISSION_REQUEST_CODE = 158;
     private ImageView imgShopLogo;
+    @SuppressLint("UseSwitchCompatOrMaterialCode")
     private Switch statusSwitch;
     private EditText edName, edAddress, edCellphone;
     private byte[] image = null;
-    private String id;
+    private ShopModel model = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,14 +48,16 @@ public class ProfileActivity extends AppCompatActivity {
         edAddress = findViewById(R.id.edProfileShopAddress);
         edCellphone = findViewById(R.id.edProfileUserCellphone);
 
-        Intent intent = getIntent();
-        ShopModel model = (ShopModel) intent.getSerializableExtra("shop");
+        model = (ShopModel) getIntent().getSerializableExtra("shop");
         if (model != null) {
-            imgShopLogo.setImageBitmap(ImagesAPI.convertToBitmap(model.getImage()));
-            edName.setText(model.getName());
-            edCellphone.setText(model.getCellphone());
-            id = model.getId();
             image = model.getImage();
+            imgShopLogo.setImageBitmap(ImagesAPI.convertToBitmap(image));
+            edName.setText(model.getName());
+            edAddress.setText(model.getAddress());
+            edCellphone.setText(model.getCellphone());
+            if (model.getStatus().equals("Open")) {
+                statusSwitch.setChecked(true);
+            }
         } else {
             finish();
         }
@@ -63,23 +67,30 @@ public class ProfileActivity extends AppCompatActivity {
         String name = edName.getText().toString().trim();
         String address = edAddress.getText().toString().trim();
         String cellphone = edCellphone.getText().toString().trim();
+        String status;
+        if (statusSwitch.isChecked()) {
+            status = "Open";
+        } else {
+            status = "closed";
+        }
         if (TextUtils.isEmpty(name)) {
             Toast.makeText(this, "Enter full name", Toast.LENGTH_SHORT).show();
         } else if (TextUtils.isEmpty(address)) {
             Toast.makeText(this, "Enter address", Toast.LENGTH_SHORT).show();
-        }  else if (TextUtils.isEmpty(cellphone)) {
+        } else if (TextUtils.isEmpty(cellphone)) {
             Toast.makeText(this, "Enter cellphone number", Toast.LENGTH_SHORT).show();
         } else if (image == null) {
             Toast.makeText(this, "Choose a picture for your shop", Toast.LENGTH_SHORT).show();
         } else {
-
-            ShopModel model = new ShopModel(name, cellphone , address, image);
-            FirebaseAPI.getInstance().editShop(model, bool -> {
+            ShopModel shop = new ShopModel(model.getId(), name, model.getEmail(), cellphone, model.getRating(), status, address, image);
+            FirebaseAPI.getInstance().editShop(shop, bool -> {
                 if (bool) {
-                    Intent intent = new Intent();
-                    intent.putExtra("shop", model);
-                    setResult(MainActivity.PROFILE_REQ);
-                    finish();
+                    shop.setDest(ProfileFragment.PROFILE_REQ);
+                    Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
+                    intent.putExtra("shop", shop);
+                    startActivity(intent);
+                }else {
+                    Toast.makeText(ProfileActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -92,6 +103,7 @@ public class ProfileActivity extends AppCompatActivity {
             openGallery();
         }
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -108,6 +120,7 @@ public class ProfileActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent, GALLERY_REQUEST_CODE);
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

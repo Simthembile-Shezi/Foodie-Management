@@ -75,16 +75,16 @@ public class SignupActivity extends AppCompatActivity {
         } else if (image == null) {
             Toast.makeText(this, "Choose a picture for your shop", Toast.LENGTH_SHORT).show();
         } else {
-            ShopModel model = new ShopModel(name, email, cellphone, 0.0, "Closed", address, image);
             mAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(SignupActivity.this, task -> {
                         if (task.isSuccessful()) {
+                            ShopModel model = new ShopModel(name, email, cellphone, address, image);
                             FirebaseAPI.getInstance().saveShop(model, bool -> {
-                                if (bool) {
-                                    finish();
+                                if (!bool) {
+                                    Toast.makeText(SignupActivity.this, "Login and edit shop details", Toast.LENGTH_SHORT).show();
                                 }
+                                finish();
                             });
-                            finish();
                         } else {
                             Toast.makeText(SignupActivity.this, "Registration failed.", Toast.LENGTH_SHORT).show();
                         }

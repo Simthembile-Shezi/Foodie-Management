@@ -4,10 +4,10 @@ import java.io.Serializable;
 
 public class IngredientModel implements Serializable {
     private String name;
-    private float price;
-    private int count;
+    private Double price;
+    private Integer count;
 
-    public IngredientModel(String name, float price) {
+    public IngredientModel(String name, Double price) {
         this.name = name;
         this.price = price;
     }
@@ -20,11 +20,11 @@ public class IngredientModel implements Serializable {
         this.name = name;
     }
 
-    public float getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 

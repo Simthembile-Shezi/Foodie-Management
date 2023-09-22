@@ -11,6 +11,8 @@ public class OrderModel {
     private Timestamp time;
     private Integer items;
     private Double price;
+    private String review;
+    private Integer rating;
 
     public OrderModel() {
     }
@@ -23,6 +25,18 @@ public class OrderModel {
         this.time = time;
         this.items = items;
         this.price = price;
+    }
+
+    public OrderModel(String shopId, String customer, String cellphone, String payment, Timestamp time, Integer items, Double price, String review, Integer rating) {
+        this.shopId = shopId;
+        this.customer = customer;
+        this.cellphone = cellphone;
+        this.payment = payment;
+        this.time = time;
+        this.items = items;
+        this.price = price;
+        this.review = review;
+        this.rating = rating;
     }
 
     public String getShopId() {
@@ -79,5 +93,21 @@ public class OrderModel {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public String getReview() {
+        return review;
+    }
+
+    public void setReview(String review) {
+        this.review = review;
+    }
+
+    public Integer getRating() {
+        return rating;
+    }
+
+    public void setRating(Integer rating) {
+        this.rating = rating;
     }
 }

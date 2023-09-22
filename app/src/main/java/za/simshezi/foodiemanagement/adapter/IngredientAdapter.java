@@ -14,6 +14,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.List;
 
 import za.simshezi.foodiemanagement.R;
+import za.simshezi.foodiemanagement.api.JavaAPI;
 import za.simshezi.foodiemanagement.model.IngredientModel;
 
 public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.IngredientViewHolder> {
@@ -70,40 +71,18 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
 
     public static class IngredientViewHolder extends RecyclerView.ViewHolder {
         private IngredientModel ingredient;
-        private TextView tvName, tvPrice, tvCount;
-        private FloatingActionButton btnRemove, btnAdd;
+        private TextView tvName, tvPrice;
 
         public IngredientViewHolder(@NonNull View itemView) {
             super(itemView);
             tvName = itemView.findViewById(R.id.tvIngredientName);
             tvPrice = itemView.findViewById(R.id.tvIngredientPrice);
-            tvCount = itemView.findViewById(R.id.tvIngredientCount);
-            btnRemove = itemView.findViewById(R.id.btnRemoveIngredient);
-            btnAdd = itemView.findViewById(R.id.btnAddIngredient);
         }
 
         public void setIngredient(IngredientModel ingredient) {
             this.ingredient = ingredient;
             tvName.setText(ingredient.getName());
-            tvPrice.setText(String.format("R %s", ingredient.getPrice()));
-            btnRemove.setOnClickListener(view -> {
-                int count = ingredient.getCount();
-                if (count > 0) {
-                    ingredient.setCount(count - 1);
-                    ingredientCount(ingredient);
-                }
-            });
-            btnAdd.setOnClickListener(view -> {
-                ingredient.setCount(ingredient.getCount() + 1);
-                ingredientCount(ingredient);
-            });
-        }
-
-        private void ingredientCount(IngredientModel ingredient) {
-            tvCount.setText(String.format("%s", ingredient.getCount()));
-            ingredients.remove(ingredient);
-            ingredients.add(position, ingredient);
-            onClickListener.onClick(itemView);
+            tvPrice.setText(String.format("R %s", JavaAPI.formatDouble(ingredient.getPrice())));
         }
     }
 }

@@ -14,6 +14,7 @@ import java.util.List;
 
 import za.simshezi.foodiemanagement.R;
 import za.simshezi.foodiemanagement.api.ImagesAPI;
+import za.simshezi.foodiemanagement.api.JavaAPI;
 import za.simshezi.foodiemanagement.model.ProductModel;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
@@ -92,11 +93,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             byte[] data = product.getImage();
             if(data != null){
                 imgProduct.setImageBitmap(ImagesAPI.convertToBitmap(data));
-            }
-            imgProduct.setImageResource(R.drawable.icon);
+            }else
+                imgProduct.setImageResource(R.drawable.baseline_restaurant_menu_24);
             tvName.setText(product.getName());
             tvDescription.setText(product.getDescription());
-            tvPrice.setText(String.format("R %s", product.getPrice()));
+            tvPrice.setText(String.format("R %s", JavaAPI.formatDouble(product.getPrice())));
         }
     }
 }

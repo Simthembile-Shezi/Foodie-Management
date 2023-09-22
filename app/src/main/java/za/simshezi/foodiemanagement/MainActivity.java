@@ -30,7 +30,6 @@ import za.simshezi.foodiemanagement.api.ImagesAPI;
 import za.simshezi.foodiemanagement.model.ShopModel;
 
 public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener {
-    public static final int PROFILE_REQ = 2000;
     private int finish = 0;
     private BottomNavigationView bottomNavigationView;
     private HomeFragment homeFragment = new HomeFragment();
@@ -44,7 +43,25 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         setContentView(R.layout.activity_main);
         bottomNavigationView = findViewById(R.id.bottom_nav_view);
         bottomNavigationView.setOnItemSelectedListener(this);
-        bottomNavigationView.setSelectedItemId(R.id.current_orders_dest);
+        ShopModel model = (ShopModel) getIntent().getSerializableExtra("shop");
+        switch (model.getDest()) {
+            case 0: {
+                bottomNavigationView.setSelectedItemId(R.id.current_orders_dest);
+                break;
+            }
+            case 1: {
+                bottomNavigationView.setSelectedItemId(R.id.previous_orders_dest);
+                break;
+            }
+            case 2: {
+                bottomNavigationView.setSelectedItemId(R.id.manage_menu_dest);
+                break;
+            }
+            case 3: {
+                bottomNavigationView.setSelectedItemId(R.id.profile_dest);
+                break;
+            }
+        }
     }
 
     @Override
@@ -57,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                     .replace(R.id.flFragment, homeFragment)
                     .commit();
             return true;
-        }else if (itemId == R.id.previous_orders_dest) {
+        } else if (itemId == R.id.previous_orders_dest) {
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.flFragment, ordersFragment)
@@ -82,9 +99,9 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     @Override
     public void onBackPressed() {
         finish++;
-        if(finish == 2) {
+        if (finish == 2) {
             finishAffinity();
-        }else {
+        } else {
             Toast.makeText(this, "Press back again to exit the app", Toast.LENGTH_SHORT).show();
         }
     }

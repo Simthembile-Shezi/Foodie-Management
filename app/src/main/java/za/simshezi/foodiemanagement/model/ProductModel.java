@@ -4,23 +4,39 @@ import java.io.Serializable;
 import java.util.List;
 
 public class ProductModel implements Serializable {
+    private String id;
+    private String shopId;
     private String name;
     private String description;
-    private float price;
+    private Double price;
     private byte[] image;
     private List<IngredientModel> ingredients;
 
-    public ProductModel(String name, String description, float price, byte[] image) {
+    public ProductModel(String shopId, String name, String description, Double price, byte[] image) {
+        this.shopId = shopId;
         this.name = name;
         this.description = description;
         this.price = price;
         this.image = image;
     }
 
-    public ProductModel(String name, String description, String price) {
-        this.name = name;
-        this.description = description;
-        this.price = Float.parseFloat(price);
+    public ProductModel() {
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getShopId() {
+        return shopId;
+    }
+
+    public void setShopId(String shopId) {
+        this.shopId = shopId;
     }
 
     public String getName() {
@@ -39,11 +55,11 @@ public class ProductModel implements Serializable {
         this.description = description;
     }
 
-    public float getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 

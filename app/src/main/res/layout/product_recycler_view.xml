@@ -8,6 +8,10 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -18,12 +22,25 @@
             android:layout_height="match_parent"
             android:background="@color/items">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
+            <ImageView
+                android:id="@+id/imgRecyclerProduct"
+                android:layout_width="100sp"
+                android:layout_height="100sp"
+                android:maxWidth="100sp"
+                android:maxHeight="100sp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
+                app:layout_constraintTop_toTopOf="parent"
+                tools:srcCompat="@drawable/ic_launcher_background" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/imgRecyclerProduct"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
                     android:id="@+id/tvRecyclerProductName"
@@ -31,13 +48,11 @@
                     android:layout_height="wrap_content"
                     android:text="@string/default_name" />
 
-                <ImageView
-                    android:id="@+id/imgRecyclerProduct"
-                    android:layout_width="100sp"
-                    android:layout_height="100sp"
-                    android:maxWidth="100sp"
-                    android:maxHeight="100sp"
-                    tools:srcCompat="@drawable/ic_launcher_background" />
+                <TextView
+                    android:id="@+id/tvRecyclerProductPrice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/default_price" />
 
                 <TextView
                     android:id="@+id/tvRecyclerProductDescription"
@@ -45,11 +60,6 @@
                     android:layout_height="wrap_content"
                     android:text="@string/default_description" />
 
-                <TextView
-                    android:id="@+id/tvRecyclerProductPrice"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/default_price" />
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

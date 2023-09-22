@@ -41,32 +41,6 @@
                     android:layout_weight="1"
                     android:text="@string/default_price" />
 
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/btnRemoveIngredient"
-                    android:layout_width="50sp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:contentDescription="@string/default_remove"
-                    app:srcCompat="@drawable/ic_launcher_background" />
-
-                <TextView
-                    android:id="@+id/tvIngredientCount"
-                    android:layout_width="30sp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="@string/default_count" />
-
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/btnAddIngredient"
-                    android:layout_width="50sp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:contentDescription="@string/default_add"
-                    app:srcCompat="@android:drawable/ic_input_add" />
-
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

@@ -14,19 +14,18 @@ import android.widget.Toast;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import za.simshezi.foodiemanagement.api.FirebaseAPI;
 import za.simshezi.foodiemanagement.model.ShopModel;
 
 public class LoginActivity extends AppCompatActivity {
-
-    private FirebaseAuth mAuth;
     private EditText edEmail, edPassword;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        mAuth = FirebaseAuth.getInstance();
         edEmail = findViewById(R.id.edLoginEmail);
         edPassword = findViewById(R.id.edLoginPassword);
 
@@ -56,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(this, "Enter a valid password", Toast.LENGTH_SHORT).show();
             return;
         }
-        mAuth.signInWithEmailAndPassword(email, password)
+        FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(LoginActivity.this, task -> {
                     if (task.isSuccessful()) {
                         SharedPreferences writePreferences = getSharedPreferences("login", Context.MODE_PRIVATE);
@@ -64,17 +63,30 @@ public class LoginActivity extends AppCompatActivity {
                         editor.putString("email", email);
                         editor.putString("password", password);
                         editor.apply();
-                        FirebaseUser user = mAuth.getCurrentUser();
-                        if(user != null) {
-                            FirebaseAPI.getInstance().getShop(user.getEmail(), (document) -> {
+                        FirebaseAPI api = FirebaseAPI.getInstance();
+                        api.getShop(email, (querySnapshot) -> {
+                            if (querySnapshot != null) {
+                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                DocumentSnapshot document = querySnapshot.getDocuments().get(0);
                                 ShopModel model = document.toObject(ShopModel.class);
-                                assert model != null;
-                                model.setId(document.getId());
-                                Intent intent = new Intent(this, MainActivity.class);
-                                intent.putExtra("shop", model);
-                                startActivity(intent);
-                            });
-                        }
+                                if (model != null) {
+                                    api.getShopLogo(document.getId(), bytes -> {
+                                        if (bytes != null) {
+                                            model.setImage(bytes);
+                                            model.setId(document.getId());
+                                            model.setDest(HomeFragment.HOME_REQ);
+                                            intent.putExtra("shop", model);
+                                            startActivity(intent);
+                                        } else {
+                                            Toast.makeText(LoginActivity.this, "Shop image associated with account not found", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+
+                                }
+                            } else {
+                                Toast.makeText(LoginActivity.this, "Shop associated with account not found", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     } else {
                         // Login failed
                         Toast.makeText(LoginActivity.this, "Login failed.", Toast.LENGTH_SHORT).show();
