@@ -3,6 +3,8 @@ package za.simshezi.foodiemanagement.model;
 import java.io.Serializable;
 
 public class IngredientModel implements Serializable {
+    private String ingredientId;    //PK
+    private String productId;       //FK
     private String name;
     private Double price;
     private Integer count;
@@ -28,11 +30,27 @@ public class IngredientModel implements Serializable {
         this.price = price;
     }
 
-    public int getCount() {
+    public Integer getCount() {
         return count;
     }
 
-    public void setCount(int count) {
+    public void setCount(Integer count) {
         this.count = count;
+    }
+
+    public String getIngredientId() {
+        return ingredientId;
+    }
+
+    public void setIngredientId(String ingredientId) {
+        this.ingredientId = ingredientId;
+    }
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
 }

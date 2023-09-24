@@ -18,13 +18,13 @@ import za.simshezi.foodiemanagement.api.JavaAPI;
 import za.simshezi.foodiemanagement.model.IngredientModel;
 
 public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.IngredientViewHolder> {
-    public static List<IngredientModel> ingredients;
-    private static View.OnClickListener onClickListener;
-    private static int position;
+    private List<IngredientModel> ingredients;
+    private AdapterClickListener onClickListener;
+    public IngredientModel ingredient;
 
-    public IngredientAdapter(List<IngredientModel> ingredients, View.OnClickListener onClickListener) {
-        IngredientAdapter.ingredients = ingredients;
-        IngredientAdapter.onClickListener = onClickListener;
+    public IngredientAdapter(List<IngredientModel> ingredients, AdapterClickListener onClickListener) {
+        this.ingredients = ingredients;
+        this.onClickListener = onClickListener;
     }
 
     @NonNull
@@ -37,10 +37,9 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
 
     @Override
     public void onBindViewHolder(@NonNull IngredientViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        IngredientAdapter.position = position;
-        IngredientModel ingredient = ingredients.get(position);
+        ingredient = ingredients.get(position);
         holder.setIngredient(ingredient);
-        holder.itemView.setOnClickListener(onClickListener);
+        holder.itemView.setOnClickListener(view -> onClickListener.onClick(ingredient));
     }
 
     @Override

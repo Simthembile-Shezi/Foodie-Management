@@ -13,6 +13,7 @@ public class ShopModel implements Serializable {
     private String address;
     private byte[] image;
     private int dest;
+    private ProductModel product;
 
     public ShopModel() {
     }
@@ -106,6 +107,14 @@ public class ShopModel implements Serializable {
 
     public void setDest(int dest) {
         this.dest = dest;
+    }
+
+    public ProductModel getProduct() {
+        return product;
+    }
+
+    public void setProduct(ProductModel product) {
+        this.product = product;
     }
 }
 

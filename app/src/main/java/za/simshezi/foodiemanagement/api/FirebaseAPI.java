@@ -12,6 +12,7 @@ import com.google.firebase.storage.StorageReference;
 import java.util.HashMap;
 import java.util.Map;
 
+import za.simshezi.foodiemanagement.model.IngredientModel;
 import za.simshezi.foodiemanagement.model.ProductModel;
 import za.simshezi.foodiemanagement.model.ShopModel;
 
@@ -54,7 +55,16 @@ public class FirebaseAPI {
                 })
                 .addOnFailureListener(e -> callback.onSuccess(false));
     }
-
+    public void saveIngredient(String shopId,IngredientModel model, OnSuccessListener<Boolean> callback){
+        Map<String, Object> ingredient = new HashMap<>();
+        ingredient.put("name", model.getName());
+        ingredient.put("price", model.getPrice());
+        restaurantsCollection
+                .document(shopId).collection("product")
+                .document(model.getProductId()).collection("ingredient").add(ingredient)
+                .addOnSuccessListener(bool -> callback.onSuccess(true))
+                .addOnFailureListener(e -> callback.onSuccess(false));
+    }
     public void saveShop(ShopModel model, OnSuccessListener<Boolean> callback) {
         Map<String, Object> user = new HashMap<>();
         user.put("name", model.getName());
@@ -125,6 +135,10 @@ public class FirebaseAPI {
     }
     public void getProducts(String id, OnSuccessListener<QuerySnapshot> callback) {
         Query query = restaurantsCollection.document(id).collection("product");
+        executeQuery(query, callback);
+    }
+    public void getIngredients(String shopId, String productId, OnSuccessListener<QuerySnapshot> callback) {
+        Query query = restaurantsCollection.document(shopId).collection("product").document(productId).collection("ingredient");
         executeQuery(query, callback);
     }
     public void getOrders(String shopID, OnSuccessListener<QuerySnapshot> callback) {

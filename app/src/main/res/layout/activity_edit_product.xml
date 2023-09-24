@@ -52,7 +52,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="Price"
-        android:inputType="text"
+        android:inputType="number"
         android:minHeight="48dp" />
 
     <TextView
@@ -90,18 +90,11 @@
         android:orientation="horizontal">
 
       <ImageButton
-          android:id="@+id/btnEditIngredient"
-          android:layout_width="wrap_content"
-          android:layout_height="48dp"
-          android:layout_weight="1"
-          app:srcCompat="@drawable/baseline_edit_24"
-          tools:ignore="SpeakableTextPresentCheck" />
-
-      <ImageButton
           android:id="@+id/btnRemoveIngredient"
           android:layout_width="wrap_content"
           android:layout_height="48dp"
           android:layout_weight="1"
+          android:onClick="onRemoveClicked"
           app:srcCompat="@drawable/baseline_remove_24"
           tools:ignore="SpeakableTextPresentCheck" />
 
@@ -110,7 +103,17 @@
           android:layout_width="wrap_content"
           android:layout_height="48dp"
           android:layout_weight="1"
+          android:onClick="onAddClicked"
           app:srcCompat="@drawable/baseline_add_24"
+          tools:ignore="SpeakableTextPresentCheck" />
+
+      <ImageButton
+          android:id="@+id/btnEditConfirmIngredient"
+          android:layout_width="wrap_content"
+          android:layout_height="48dp"
+          android:layout_weight="1"
+          android:onClick="onConfirmClicked"
+          app:srcCompat="@drawable/baseline_check_24"
           tools:ignore="SpeakableTextPresentCheck" />
     </LinearLayout>
 
@@ -127,7 +130,7 @@
           android:text="Name" />
 
       <EditText
-          android:id="@+id/edIngredientName"
+          android:id="@+id/edAddIngredientName"
           android:layout_width="wrap_content"
           android:layout_height="48dp"
           android:layout_weight="1"
@@ -150,13 +153,13 @@
           android:text="Price" />
 
       <EditText
-          android:id="@+id/edIngredientPrice"
+          android:id="@+id/edAddIngredientPrice"
           android:layout_width="wrap_content"
           android:layout_height="48dp"
           android:layout_weight="1"
           android:ems="10"
           android:hint="Price"
-          android:inputType="text" />
+          android:inputType="number" />
 
     </LinearLayout>
 
