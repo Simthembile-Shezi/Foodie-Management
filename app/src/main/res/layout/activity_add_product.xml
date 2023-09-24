@@ -11,7 +11,9 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Product"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:text="Add Product"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -89,7 +91,7 @@
         <EditText
             android:id="@+id/edMenuProductDescription"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="150dp"
             android:ems="10"
             android:hint="Description"
             android:inputType="text"
@@ -98,7 +100,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btnSaveProduct"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
