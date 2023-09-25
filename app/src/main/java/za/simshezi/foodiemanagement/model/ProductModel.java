@@ -78,4 +78,8 @@ public class ProductModel implements Serializable {
     public void setIngredients(List<IngredientModel> ingredients) {
         this.ingredients = ingredients;
     }
+
+    public void addIngredients(IngredientModel ingredient) {
+        ingredients.add(ingredient);
+    }
 }

@@ -16,11 +16,10 @@ import za.simshezi.foodiemanagement.api.JavaAPI;
 import za.simshezi.foodiemanagement.model.OrderModel;
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHolder> {
-    public OrderModel model;
     private List<OrderModel> list;
-    private View.OnClickListener onClickListener;
+    private AdapterClickListener onClickListener;
 
-    public OrderAdapter(List<OrderModel> list, View.OnClickListener onClickListener) {
+    public OrderAdapter(List<OrderModel> list, AdapterClickListener onClickListener) {
         this.list = list;
         this.onClickListener = onClickListener;
     }
@@ -37,10 +36,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     public void onBindViewHolder(@NonNull OrderViewHolder holder, int position) {
         OrderModel model = list.get(position);
         holder.setOrder(model);
-        holder.itemView.setOnClickListener((view -> {
-            this.model = list.get(position);
-            onClickListener.onClick(view);
-        }));
+        holder.itemView.setOnClickListener((view -> onClickListener.onClick(list.get(position))));
     }
 
     @Override

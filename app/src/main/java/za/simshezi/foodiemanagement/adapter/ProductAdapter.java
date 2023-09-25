@@ -18,12 +18,11 @@ import za.simshezi.foodiemanagement.api.JavaAPI;
 import za.simshezi.foodiemanagement.model.ProductModel;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
-    public ProductModel product;
     private List<ProductModel> products;
-    private View.OnClickListener listener;
+    private AdapterClickListener listener;
 
 
-    public ProductAdapter(List<ProductModel> products, View.OnClickListener listener) {
+    public ProductAdapter(List<ProductModel> products, AdapterClickListener listener) {
         this.products = products;
         this.listener = listener;
     }
@@ -41,10 +40,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     public void onBindViewHolder(@NonNull ProductViewHolder holder, @SuppressLint("RecyclerView") int position) {
         ProductModel product = products.get(position);
         holder.setProduct(product);
-        holder.itemView.setOnClickListener(view -> {
-            this.product = products.get(position);
-            listener.onClick(view);
-        });
+        holder.itemView.setOnClickListener(view -> listener.onClick(products.get(position)));
     }
 
     @Override

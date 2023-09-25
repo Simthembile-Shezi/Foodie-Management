@@ -1,6 +1,7 @@
 package za.simshezi.foodiemanagement.api;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -13,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import za.simshezi.foodiemanagement.model.IngredientModel;
+import za.simshezi.foodiemanagement.model.OrderModel;
 import za.simshezi.foodiemanagement.model.ProductModel;
 import za.simshezi.foodiemanagement.model.ShopModel;
 
@@ -38,33 +40,6 @@ public class FirebaseAPI {
         return firebase;
     }
 
-    public void saveProduct(ProductModel model, OnSuccessListener<Boolean> callback) {
-        Map<String, Object> product = new HashMap<>();
-        product.put("name", model.getName());
-        product.put("description", model.getDescription());
-        product.put("price", model.getPrice());
-
-        restaurantsCollection.document(model.getShopId()).collection("product").add(product)
-                .addOnSuccessListener(documentReference -> {
-                    storageRef.child("products_images/" + documentReference.getId() + ".jpg")
-                            .putBytes(model.getImage())
-                            .addOnSuccessListener(taskSnapshot -> callback.onSuccess(true))
-                            .addOnFailureListener(e -> {
-                                callback.onSuccess(false); // Handle the failure
-                            });
-                })
-                .addOnFailureListener(e -> callback.onSuccess(false));
-    }
-    public void saveIngredient(String shopId,IngredientModel model, OnSuccessListener<Boolean> callback){
-        Map<String, Object> ingredient = new HashMap<>();
-        ingredient.put("name", model.getName());
-        ingredient.put("price", model.getPrice());
-        restaurantsCollection
-                .document(shopId).collection("product")
-                .document(model.getProductId()).collection("ingredient").add(ingredient)
-                .addOnSuccessListener(bool -> callback.onSuccess(true))
-                .addOnFailureListener(e -> callback.onSuccess(false));
-    }
     public void saveShop(ShopModel model, OnSuccessListener<Boolean> callback) {
         Map<String, Object> user = new HashMap<>();
         user.put("name", model.getName());
@@ -88,6 +63,39 @@ public class FirebaseAPI {
                 });
     }
 
+    public void saveProduct(ProductModel model, OnSuccessListener<Boolean> callback) {
+        Map<String, Object> product = new HashMap<>();
+        product.put("name", model.getName());
+        product.put("description", model.getDescription());
+        product.put("price", model.getPrice());
+
+        restaurantsCollection.document(model.getShopId()).collection("product").add(product)
+                .addOnSuccessListener(documentReference -> {
+                    storageRef.child("products_images/" + documentReference.getId() + ".jpg")
+                            .putBytes(model.getImage())
+                            .addOnSuccessListener(taskSnapshot -> callback.onSuccess(true))
+                            .addOnFailureListener(e -> {
+                                callback.onSuccess(false); // Handle the failure
+                            });
+                })
+                .addOnFailureListener(e -> callback.onSuccess(false));
+    }
+
+    public void saveIngredient(ProductModel product, IngredientModel model, OnSuccessListener<Boolean> callback) {
+        Map<String, Object> ingredient = new HashMap<>();
+        ingredient.put("name", model.getName());
+        ingredient.put("price", model.getPrice());
+        restaurantsCollection.document(product.getShopId())
+                .collection("product").document(product.getId())
+                .collection("ingredient").document(model.getId()).set(ingredient, SetOptions.merge())
+                .addOnSuccessListener(bool -> callback.onSuccess(true))
+                .addOnFailureListener(e -> callback.onSuccess(false));
+    }
+    public void updateOrder(String orderId, OnSuccessListener<Boolean> callback) {
+        ordersCollection.document(orderId).update("status", "Completed")
+                .addOnSuccessListener(documentReference -> callback.onSuccess(true))
+                .addOnFailureListener(e -> callback.onSuccess(false));
+    }
     public void editShop(ShopModel model, OnSuccessListener<Boolean> callback) {
         Map<String, Object> user = new HashMap<>();
         user.put("name", model.getName());
@@ -111,6 +119,26 @@ public class FirebaseAPI {
                 });
     }
 
+    public void editProduct(ProductModel model, OnSuccessListener<Boolean> callback) {
+        Map<String, Object> product = new HashMap<>();
+        product.put("name", model.getName());
+        product.put("description", model.getDescription());
+        product.put("price", model.getPrice());
+
+        restaurantsCollection.document(model.getShopId())
+                .collection("product").document(model.getId()).set(product, SetOptions.merge())
+                .addOnSuccessListener(runnable -> callback.onSuccess(true))
+                .addOnFailureListener(e -> callback.onSuccess(false));
+    }
+
+    public void deleteIngredient(ProductModel product, IngredientModel model, OnSuccessListener<Boolean> callback) {
+        restaurantsCollection.document(product.getShopId())
+                .collection("product").document(product.getId())
+                .collection("ingredient").document(model.getId()).delete()
+                .addOnSuccessListener(bool -> callback.onSuccess(true))
+                .addOnFailureListener(e -> callback.onSuccess(false));
+    }
+
     public void getShopLogo(String documentId, OnSuccessListener<byte[]> callback) {
         StorageReference imageRef = storageRef.child("restaurants_images/" + documentId + ".jpg");
 
@@ -120,6 +148,7 @@ public class FirebaseAPI {
                 .addOnSuccessListener(bytes -> callback.onSuccess(bytes))
                 .addOnFailureListener(exception -> callback.onSuccess(null));
     }
+
     public void getProductImage(String documentId, OnSuccessListener<byte[]> callback) {
         StorageReference imageRef = storageRef.child("products_images/" + documentId + ".jpg");
 
@@ -129,18 +158,22 @@ public class FirebaseAPI {
                 .addOnSuccessListener(bytes -> callback.onSuccess(bytes))
                 .addOnFailureListener(exception -> callback.onSuccess(null));
     }
+
     public void getShop(String email, OnSuccessListener<QuerySnapshot> callback) {
         Query query = restaurantsCollection.whereEqualTo("email", email);
         executeQuery(query, callback);
     }
+
     public void getProducts(String id, OnSuccessListener<QuerySnapshot> callback) {
         Query query = restaurantsCollection.document(id).collection("product");
         executeQuery(query, callback);
     }
+
     public void getIngredients(String shopId, String productId, OnSuccessListener<QuerySnapshot> callback) {
         Query query = restaurantsCollection.document(shopId).collection("product").document(productId).collection("ingredient");
         executeQuery(query, callback);
     }
+
     public void getOrders(String shopID, OnSuccessListener<QuerySnapshot> callback) {
         Query query = ordersCollection.whereEqualTo("shopId", shopID);
         executeQuery(query, callback);
@@ -148,6 +181,17 @@ public class FirebaseAPI {
 
     public void getOrdersReviews(String shopID, OnSuccessListener<QuerySnapshot> callback) {
         Query query = ordersReviewsCollection.whereEqualTo("shopId", shopID);
+        executeQuery(query, callback);
+    }
+
+    public void getOrderProducts(String orderId, OnSuccessListener<QuerySnapshot> callback) {
+        Query query = ordersCollection.document(orderId).collection("product");
+        executeQuery(query, callback);
+    }
+
+    public void getOrderIngredients(String orderId, String productId, OnSuccessListener<QuerySnapshot> callback) {
+        Query query = ordersCollection.document(orderId).collection("product")
+                .document(productId).collection("ingredient");
         executeQuery(query, callback);
     }
 
@@ -165,6 +209,4 @@ public class FirebaseAPI {
             }
         });
     }
-
-
 }

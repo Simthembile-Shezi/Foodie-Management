@@ -36,18 +36,10 @@ public class SplashActivity extends AppCompatActivity {
                                     DocumentSnapshot document = querySnapshot.getDocuments().get(0);
                                     ShopModel model = document.toObject(ShopModel.class);
                                     if (model != null) {
-                                        api.getShopLogo(document.getId(), bytes -> {
-                                            if (bytes != null) {
-                                                model.setImage(bytes);
-                                                model.setId(document.getId());
-                                                model.setDest(HomeFragment.HOME_REQ);
-                                                intent.putExtra("shop", model);
-                                                startActivity(intent);
-                                            } else {
-                                                Toast.makeText(SplashActivity.this, "Shop image associated with account not found", Toast.LENGTH_SHORT).show();
-                                            }
-                                        });
-
+                                        model.setId(document.getId());
+                                        model.setDest(HomeFragment.HOME_REQ);
+                                        intent.putExtra("shop", model);
+                                        startActivity(intent);
                                     }
                                 } else {
                                     Toast.makeText(SplashActivity.this, "Shop associated with account not found", Toast.LENGTH_SHORT).show();

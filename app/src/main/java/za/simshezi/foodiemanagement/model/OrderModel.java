@@ -1,19 +1,21 @@
 package za.simshezi.foodiemanagement.model;
 
 import com.google.firebase.Timestamp;
-import com.google.type.DateTime;
 
-public class OrderModel {
+import java.io.Serializable;
+
+public class OrderModel implements Serializable {
+    private String id;
     private String shopId;
     private String customer;
     private String cellphone;
     private String payment;
+    private String status;
     private Timestamp time;
     private Integer items;
     private Double price;
     private String review;
     private Integer rating;
-
     public OrderModel() {
     }
 
@@ -109,5 +111,21 @@ public class OrderModel {
 
     public void setRating(Integer rating) {
         this.rating = rating;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

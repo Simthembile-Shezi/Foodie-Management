@@ -9,8 +9,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import java.util.List;
 
 import za.simshezi.foodiemanagement.R;
@@ -20,7 +18,6 @@ import za.simshezi.foodiemanagement.model.IngredientModel;
 public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.IngredientViewHolder> {
     private List<IngredientModel> ingredients;
     private AdapterClickListener onClickListener;
-    public IngredientModel ingredient;
 
     public IngredientAdapter(List<IngredientModel> ingredients, AdapterClickListener onClickListener) {
         this.ingredients = ingredients;
@@ -37,9 +34,9 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
 
     @Override
     public void onBindViewHolder(@NonNull IngredientViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        ingredient = ingredients.get(position);
+        IngredientModel ingredient = ingredients.get(position);
         holder.setIngredient(ingredient);
-        holder.itemView.setOnClickListener(view -> onClickListener.onClick(ingredient));
+        holder.itemView.setOnClickListener(view -> onClickListener.onClick(ingredients.get(position)));
     }
 
     @Override
@@ -48,24 +45,22 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
     }
 
     public void add(IngredientModel ingredient) {
-        ingredients.add(ingredient);
-        notifyItemInserted(ingredients.size() - 1);
+        int pos = ingredients.indexOf(ingredient);
+        if(pos >= 0){
+            ingredients.remove(pos);
+            notifyItemRemoved(pos);
+            ingredients.add(pos,ingredient);
+            notifyItemInserted(pos);
+        }else {
+            ingredients.add(ingredient);
+            notifyItemInserted(ingredients.size() - 1);
+        }
     }
 
-    public void remove(int position) {
-        ingredients.remove(position);
-        notifyItemRemoved(position);
-    }
-
-    public void move(int fromPosition, int toPosition) {
-        IngredientModel ingredient = ingredients.remove(fromPosition);
-        ingredients.add(toPosition, ingredient);
-        notifyItemMoved(fromPosition, toPosition);
-    }
-
-    public void edit(int position, IngredientModel ingredient) {
-        ingredients.add(position, ingredient);
-        notifyItemChanged(position);
+    public void remove(IngredientModel ingredient) {
+        int pos = ingredients.indexOf(ingredient);
+        ingredients.remove(pos);
+        notifyItemRemoved(pos);
     }
 
     public static class IngredientViewHolder extends RecyclerView.ViewHolder {
@@ -75,7 +70,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
         public IngredientViewHolder(@NonNull View itemView) {
             super(itemView);
             tvName = itemView.findViewById(R.id.tvIngredientName);
-            tvPrice = itemView.findViewById(R.id.tvIngredientPrice);
+            tvPrice = itemView.findViewById(R.id.tvIngredientCount);
         }
 
         public void setIngredient(IngredientModel ingredient) {

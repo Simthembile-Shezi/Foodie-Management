@@ -64,7 +64,7 @@
     <EditText
         android:id="@+id/edEditProductDescription"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="wrap_content"
         android:ems="10"
         android:hint="Description"
         android:inputType="text"
@@ -131,10 +131,8 @@
 
       <EditText
           android:id="@+id/edAddIngredientName"
-          android:layout_width="wrap_content"
+          android:layout_width="300sp"
           android:layout_height="48dp"
-          android:layout_weight="1"
-          android:ems="10"
           android:hint="Name"
           android:inputType="text" />
 
@@ -154,10 +152,8 @@
 
       <EditText
           android:id="@+id/edAddIngredientPrice"
-          android:layout_width="wrap_content"
+          android:layout_width="300sp"
           android:layout_height="48dp"
-          android:layout_weight="1"
-          android:ems="10"
           android:hint="Price"
           android:inputType="number" />
 

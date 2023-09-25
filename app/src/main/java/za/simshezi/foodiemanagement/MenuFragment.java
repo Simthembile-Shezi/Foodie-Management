@@ -27,6 +27,7 @@ public class MenuFragment extends Fragment {
     public static int REQ_MENU = 2;
     private Button btnAddProduct;
     private RecyclerView lstProduct;
+    private ShopModel shop;
     public MenuFragment() {
         // Required empty public constructor
     }
@@ -46,7 +47,7 @@ public class MenuFragment extends Fragment {
 
     private void build() {
         Intent data = requireActivity().getIntent();
-        ShopModel shop = (ShopModel) data.getSerializableExtra("shop");
+        shop = (ShopModel) data.getSerializableExtra("shop");
         if(shop != null) {
             ArrayList<ProductModel> list = new ArrayList<>();
             btnAddProduct.setOnClickListener(view -> {
@@ -62,16 +63,12 @@ public class MenuFragment extends Fragment {
                         if (product != null) {
                             api.getProductImage(document.getId(), bytes -> {
                                 if(bytes != null){
+                                    product.setShopId(shop.getId());
                                     product.setId(document.getId());
                                     product.setImage(bytes);
                                     list.add(product);
                                     if(list.size() == querySnapshot.size()){
-                                        ProductAdapter adapter = new ProductAdapter(list, view -> {
-
-                                        });
-                                        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-                                        lstProduct.setAdapter(adapter);
-                                        lstProduct.setLayoutManager(layoutManager);
+                                        update(list);
                                     }
                                 }
                             });
@@ -80,5 +77,17 @@ public class MenuFragment extends Fragment {
                 }
             });
         }
+    }
+    private void update(ArrayList<ProductModel> list){
+        ProductAdapter adapter = new ProductAdapter(list, model -> {
+            ProductModel product = (ProductModel) model;
+            shop.setProduct(product);
+            Intent intent = new Intent(requireContext(), EditProductActivity.class);
+            intent.putExtra("shop", shop);
+            startActivity(intent);
+        });
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        lstProduct.setAdapter(adapter);
+        lstProduct.setLayoutManager(layoutManager);
     }
 }
