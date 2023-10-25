@@ -56,6 +56,28 @@
                 android:background="@color/items">
 
                 <LinearLayout
+                    android:id="@+id/layoutProfileEducation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imageEducation"
+                        android:layout_width="100sp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:src="@drawable/baseline_cast_for_education_24" />
+
+                    <TextView
+                        android:id="@+id/tvEducation"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="Learn Recipes"
+                        android:textSize="40sp" />
+                </LinearLayout>
+
+                <LinearLayout
                     android:id="@+id/layoutProfileSalesReport"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

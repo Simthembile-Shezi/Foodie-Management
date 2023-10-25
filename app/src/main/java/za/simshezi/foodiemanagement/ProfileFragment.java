@@ -23,6 +23,7 @@ import za.simshezi.foodiemanagement.model.ShopModel;
 public class ProfileFragment extends Fragment {
     public static final int PROFILE_REQ = 3;
     private TextView tvName, tvEmail;
+    private LinearLayout layoutEducation;
     private LinearLayout layoutReports;
     private LinearLayout layoutPromotions;
     private LinearLayout layoutHelp;
@@ -44,6 +45,7 @@ public class ProfileFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         tvName = view.findViewById(R.id.tvProfileName);
         tvEmail = view.findViewById(R.id.tvProfileEmail);
+        layoutEducation = view.findViewById(R.id.layoutProfileEducation);
         layoutReports = view.findViewById(R.id.layoutProfileSalesReport);
         layoutPromotions = view.findViewById(R.id.layoutProfilePromotions);
         layoutHelp = view.findViewById(R.id.layoutProfileHelp);
@@ -56,6 +58,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void build() {
+        layoutEducation.setOnClickListener(onLayoutClicked(EducationActivity.class));
         layoutReports.setOnClickListener(onLayoutClicked(SalesReportActivity.class));
         layoutPromotions.setOnClickListener(onLayoutClicked(PromotionsActivity.class));
         layoutHelp.setOnClickListener(onLayoutClicked(HelpActivity.class));
