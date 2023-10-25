@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import za.simshezi.foodiemanagement.R;
@@ -22,8 +23,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     private AdapterClickListener listener;
 
 
-    public ProductAdapter(List<ProductModel> products, AdapterClickListener listener) {
-        this.products = products;
+    public ProductAdapter(AdapterClickListener listener) {
+        this.products = new ArrayList<>();
         this.listener = listener;
     }
 
@@ -53,29 +54,24 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         notifyItemInserted(products.size() - 1);
     }
 
-    public void remove(int position) {
-        products.remove(position);
-        notifyItemRemoved(position);
+    public void edit(ProductModel product) {
+        int position = products.indexOf(product);
+        if (position > -1) {
+            products.remove(product);
+            products.add(position, product);
+            notifyItemChanged(position);
+        }
     }
 
-    public void move(int fromPosition, int toPosition) {
-        ProductModel product = products.get(fromPosition);
-        products.add(toPosition, product);
-        notifyItemMoved(fromPosition, toPosition);
-    }
-
-    public void edit(int position, ProductModel product) {
-        products.add(position, product);
-        notifyItemChanged(position);
-    }
-
-    public ProductModel get(int position){
+    public ProductModel get(int position) {
         return products.get(position);
     }
+
     public static class ProductViewHolder extends RecyclerView.ViewHolder {
         public ProductModel product;
         public TextView tvName, tvDescription, tvPrice;
         public ImageView imgProduct;
+
         public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
             tvName = itemView.findViewById(R.id.tvRecyclerProductName);
@@ -87,9 +83,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         public void setProduct(ProductModel product) {
             this.product = product;
             byte[] data = product.getImage();
-            if(data != null){
+            if (data != null) {
                 imgProduct.setImageBitmap(ImagesAPI.convertToBitmap(data));
-            }else
+            } else
                 imgProduct.setImageResource(R.drawable.baseline_restaurant_menu_24);
             tvName.setText(product.getName());
             tvDescription.setText(product.getDescription());

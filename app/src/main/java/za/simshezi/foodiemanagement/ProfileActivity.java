@@ -37,6 +37,7 @@ public class ProfileActivity extends AppCompatActivity {
     private EditText edName, edAddress, edCellphone;
     private byte[] image = null;
     private ShopModel model = null;
+    private FirebaseAPI api;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,18 +50,18 @@ public class ProfileActivity extends AppCompatActivity {
         edCellphone = findViewById(R.id.edProfileUserCellphone);
 
         model = (ShopModel) getIntent().getSerializableExtra("shop");
-        if (model != null) {
+        edName.setText(model.getName());
+        edAddress.setText(model.getAddress());
+        edCellphone.setText(model.getCellphone());
+        if (model.getStatus().equals("Open")) {
+            statusSwitch.setChecked(true);
+        }
+        api = FirebaseAPI.getInstance();
+        api.getShopLogo(model.getId(), bytes -> {
+            model.setImage(bytes);
             image = model.getImage();
             imgShopLogo.setImageBitmap(ImagesAPI.convertToBitmap(image));
-            edName.setText(model.getName());
-            edAddress.setText(model.getAddress());
-            edCellphone.setText(model.getCellphone());
-            if (model.getStatus().equals("Open")) {
-                statusSwitch.setChecked(true);
-            }
-        } else {
-            finish();
-        }
+        });
     }
 
     public void onProfileConfirmClicked(View view) {
@@ -83,7 +84,7 @@ public class ProfileActivity extends AppCompatActivity {
             Toast.makeText(this, "Choose a picture for your shop", Toast.LENGTH_SHORT).show();
         } else {
             ShopModel shop = new ShopModel(model.getId(), name, model.getEmail(), cellphone, model.getRating(), status, address, image);
-            FirebaseAPI.getInstance().editShop(shop, bool -> {
+            api.editShop(shop, bool -> {
                 if (bool) {
                     shop.setDest(ProfileFragment.PROFILE_REQ);
                     Intent intent = new Intent(ProfileActivity.this, MainActivity.class);

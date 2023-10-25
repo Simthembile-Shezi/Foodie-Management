@@ -32,7 +32,7 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
     private RecyclerView lstCurrentOrders;
     private ConstraintLayout layoutOrders, layoutNoOrders;
     private SearchView searchView;
-    private FloatingActionButton btnFilter;
+    private FloatingActionButton btnRefresh;
     private OrderAdapter adapter;
     private List<OrderModel> list;
     private FirebaseAPI api;
@@ -51,7 +51,7 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
         super.onViewCreated(view, savedInstanceState);
         lstCurrentOrders = view.findViewById(R.id.lstMainOrders);
         searchView = view.findViewById(R.id.searchViewHome);
-        btnFilter = view.findViewById(R.id.btnHomeFilter);
+        btnRefresh = view.findViewById(R.id.btnHomeRefresh);
         layoutOrders = view.findViewById(R.id.layoutHomeOrders);
         layoutNoOrders = view.findViewById(R.id.layoutNoOrders);
         build();
@@ -67,26 +67,24 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
                 if(DocumentSnapshot != null){
                     for (QueryDocumentSnapshot document : DocumentSnapshot){
                         OrderModel model = document.toObject(OrderModel.class);
-                        model.setId(document.getId());
-                        list.add(model);
+                        if(!model.getStatus().equals("Collected")) {
+                            model.setId(document.getId());
+                            list.add(model);
+                        }
                     }
-                    if(DocumentSnapshot.size() == list.size()){
-                        adapter = new OrderAdapter(list, (model -> {
-                            OrderModel order = (OrderModel) model;
-                            Intent send = new Intent(requireActivity(), ManageOrderActivity.class);
-                            shop.setOrder(order);
-                            send.putExtra("shop", shop);
-                            startActivity(send);
-                        }));
-                        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-                        lstCurrentOrders.setAdapter(adapter);
-                        lstCurrentOrders.setLayoutManager(layoutManager);
+                    adapter = new OrderAdapter(list, (modelView -> {
+                        OrderModel order = (OrderModel) modelView;
+                        Intent send = new Intent(requireActivity(), ManageOrderActivity.class);
+                        shop.setOrder(order);
+                        send.putExtra("shop", shop);
+                        startActivity(send);
+                    }));
+                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+                    lstCurrentOrders.setAdapter(adapter);
+                    lstCurrentOrders.setLayoutManager(layoutManager);
 
-                        searchView.setOnQueryTextListener(HomeFragment.this);
-
-                        layoutNoOrders.setVisibility(View.GONE);
-                        layoutOrders.setVisibility(View.VISIBLE);
-                    }
+                    searchView.setOnQueryTextListener(HomeFragment.this);
+                    btnRefresh.setOnClickListener((view -> build()));
                 }else {
                     layoutOrders.setVisibility(View.GONE);
                     layoutNoOrders.setVisibility(View.VISIBLE);

@@ -36,4 +36,6 @@
     <string name="open_or_close">Are you open or close</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
+    <string name="completed">Completed</string>
+    <string name="collected">Collected</string>
 </resources>

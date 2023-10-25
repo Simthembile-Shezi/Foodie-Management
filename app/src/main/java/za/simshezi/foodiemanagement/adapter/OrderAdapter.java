@@ -72,7 +72,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
     public static class OrderViewHolder extends RecyclerView.ViewHolder{
         private OrderModel model;
-        private TextView tvName, tvPayment, tvPrice, tvTime, tvItems;
+        private TextView tvName, tvPayment, tvPrice, tvTime, tvDate, tvStatus, tvItems;
         public OrderViewHolder(@NonNull View itemView) {
             super(itemView);
             tvName = itemView.findViewById(R.id.tvCustomerName);
@@ -80,13 +80,17 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             tvPrice = itemView.findViewById(R.id.tvOrderPrice);
             tvTime = itemView.findViewById(R.id.tvOrderTime);
             tvItems = itemView.findViewById(R.id.tvOrderItems);
+            tvStatus = itemView.findViewById(R.id.tvOrderStatus);
+            tvDate = itemView.findViewById(R.id.tvOrderDate);
         }
 
         public void setOrder(OrderModel model) {
             this.model = model;
             tvName.setText(model.getCustomer());
             tvTime.setText(String.format("%s", JavaAPI.getTime(model.getTime())));
+            tvDate.setText(String.format("%s", JavaAPI.getDate(model.getTime())));
             tvPayment.setText(model.getPayment());
+            tvStatus.setText(model.getStatus());
             tvItems.setText(String.format("%s items", model.getItems()));
             tvPrice.setText(String.format("R %s", JavaAPI.formatDouble(model.getPrice())));
         }

@@ -53,13 +53,11 @@ public class OrdersFragment extends Fragment {
                 if(querySnapshot != null){
                     for(DocumentSnapshot document : querySnapshot){
                         OrderModel order = document.toObject(OrderModel.class);
-                        if(order != null) {
+                        if(order != null && order.getStatus().equals("Collected")) {
                             list.add(order);
                         }
                     }
-                    OrderReviewAdapter adapter = new OrderReviewAdapter(list, (view -> {
-
-                    }));
+                    OrderReviewAdapter adapter = new OrderReviewAdapter(list);
                     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
                     lstPreviousOrders.setAdapter(adapter);
                     lstPreviousOrders.setLayoutManager(layoutManager);

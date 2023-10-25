@@ -7,8 +7,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
@@ -25,6 +27,7 @@ public class ManageOrderActivity extends AppCompatActivity {
     private ShopModel shop;
     private RecyclerView lstProduct;
     private TextView tvName, tvCellphone, tvPayment, tvETA, tvStatus, tvPrice;
+    private Button btnStatus;
     private ArrayList<ProductModel> list;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +40,7 @@ public class ManageOrderActivity extends AppCompatActivity {
         tvStatus = findViewById(R.id.tvOrderSummeryStatus);
         tvPayment = findViewById(R.id.tvOrderSummeryPayment);
         tvPrice = findViewById(R.id.tvOrderSummeryPrice);
+        btnStatus = findViewById(R.id.btnManageOrderStatus);
         shop = (ShopModel) getIntent().getSerializableExtra("shop");
         api = FirebaseAPI.getInstance();
         build();
@@ -50,6 +54,12 @@ public class ManageOrderActivity extends AppCompatActivity {
         tvETA.setText(shop.getOrder().getTime());
         tvStatus.setText(shop.getOrder().getStatus());
         tvPrice.setText(String.format("R %s", JavaAPI.formatDouble(shop.getOrder().getPrice())));
+        String status = shop.getOrder().getStatus();
+        if(status.equals("Placed")){
+            btnStatus.setText(R.string.completed);
+        }else if(status.equals("Completed")){
+            btnStatus.setText(R.string.collected);
+        }
         list = new ArrayList<>();
         api.getOrderProducts(orderId, queryDocument -> {
             if(queryDocument != null){
@@ -82,12 +92,11 @@ public class ManageOrderActivity extends AppCompatActivity {
 
             }
         });
-
     }
 
-    public void onOrderComplete(View view) {
+    public void onOrderStatusUpdate(View view) {
         String orderId = shop.getOrder().getId();
-        api.updateOrder(orderId, aBoolean -> {
+        api.updateOrder(orderId, btnStatus.getText().toString() , aBoolean -> {
             if(aBoolean){
                 Intent intent = new Intent(ManageOrderActivity.this, MainActivity.class);
                 shop.setDest(HomeFragment.HOME_REQ);

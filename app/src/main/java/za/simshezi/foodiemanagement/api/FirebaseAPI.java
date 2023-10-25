@@ -22,7 +22,6 @@ public class FirebaseAPI {
     private final StorageReference storageRef;
     private final CollectionReference restaurantsCollection;
     private final CollectionReference ordersCollection;
-    private final CollectionReference ordersReviewsCollection;
     private static FirebaseAPI firebase;
 
     private FirebaseAPI() {
@@ -30,7 +29,6 @@ public class FirebaseAPI {
         storageRef = FirebaseStorage.getInstance().getReference();
         restaurantsCollection = db.collection("restaurants");
         ordersCollection = db.collection("orders");
-        ordersReviewsCollection = db.collection("ordersReviews");
     }
 
     public static FirebaseAPI getInstance() {
@@ -91,8 +89,8 @@ public class FirebaseAPI {
                 .addOnSuccessListener(bool -> callback.onSuccess(true))
                 .addOnFailureListener(e -> callback.onSuccess(false));
     }
-    public void updateOrder(String orderId, OnSuccessListener<Boolean> callback) {
-        ordersCollection.document(orderId).update("status", "Completed")
+    public void updateOrder(String orderId, String status, OnSuccessListener<Boolean> callback) {
+        ordersCollection.document(orderId).update("status", status)
                 .addOnSuccessListener(documentReference -> callback.onSuccess(true))
                 .addOnFailureListener(e -> callback.onSuccess(false));
     }
@@ -180,7 +178,7 @@ public class FirebaseAPI {
     }
 
     public void getOrdersReviews(String shopID, OnSuccessListener<QuerySnapshot> callback) {
-        Query query = ordersReviewsCollection.whereEqualTo("shopId", shopID);
+        Query query = ordersCollection.whereEqualTo("shopId", shopID);
         executeQuery(query, callback);
     }
 

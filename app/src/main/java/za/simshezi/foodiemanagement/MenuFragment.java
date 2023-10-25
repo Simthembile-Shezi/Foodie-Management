@@ -28,6 +28,8 @@ public class MenuFragment extends Fragment {
     private Button btnAddProduct;
     private RecyclerView lstProduct;
     private ShopModel shop;
+    private ProductAdapter adapter;
+
     public MenuFragment() {
         // Required empty public constructor
     }
@@ -48,8 +50,17 @@ public class MenuFragment extends Fragment {
     private void build() {
         Intent data = requireActivity().getIntent();
         shop = (ShopModel) data.getSerializableExtra("shop");
-        if(shop != null) {
-            ArrayList<ProductModel> list = new ArrayList<>();
+        if (shop != null) {
+            ProductAdapter adapter = new ProductAdapter(model -> {
+                ProductModel product = (ProductModel) model;
+                shop.setProduct(product);
+                Intent intent = new Intent(requireContext(), EditProductActivity.class);
+                intent.putExtra("shop", shop);
+                startActivity(intent);
+            });
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+            lstProduct.setAdapter(adapter);
+            lstProduct.setLayoutManager(layoutManager);
             btnAddProduct.setOnClickListener(view -> {
                 Intent intent = new Intent(requireContext(), AddProductActivity.class);
                 intent.putExtra("shop", shop);
@@ -61,33 +72,17 @@ public class MenuFragment extends Fragment {
                     for (DocumentSnapshot document : querySnapshot) {
                         ProductModel product = document.toObject(ProductModel.class);
                         if (product != null) {
-                            api.getProductImage(document.getId(), bytes -> {
-                                if(bytes != null){
-                                    product.setShopId(shop.getId());
-                                    product.setId(document.getId());
-                                    product.setImage(bytes);
-                                    list.add(product);
-                                    if(list.size() == querySnapshot.size()){
-                                        update(list);
-                                    }
-                                }
-                            });
+                            product.setShopId(shop.getId());
+                            product.setId(document.getId());
+                            adapter.add(product);
+                            new Thread(() -> api.getProductImage(document.getId(), bytes -> {
+                                product.setImage(bytes);
+                                adapter.edit(product);
+                            })).start();
                         }
                     }
                 }
             });
         }
-    }
-    private void update(ArrayList<ProductModel> list){
-        ProductAdapter adapter = new ProductAdapter(list, model -> {
-            ProductModel product = (ProductModel) model;
-            shop.setProduct(product);
-            Intent intent = new Intent(requireContext(), EditProductActivity.class);
-            intent.putExtra("shop", shop);
-            startActivity(intent);
-        });
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-        lstProduct.setAdapter(adapter);
-        lstProduct.setLayoutManager(layoutManager);
     }
 }

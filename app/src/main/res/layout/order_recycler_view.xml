@@ -26,7 +26,7 @@
                 android:id="@+id/tvCustomerName"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_marginEnd="50dp"
+                android:layout_marginEnd="20dp"
                 android:text="Name"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -38,7 +38,7 @@
                 android:id="@+id/linearLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="50dp"
+                android:layout_marginEnd="20dp"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/linearLayout4"
@@ -46,24 +46,32 @@
                 app:layout_constraintVertical_bias="0.0">
 
                 <TextView
+                    android:id="@+id/tvOrderDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="20/02/2023" />
+
+                <TextView
                     android:id="@+id/tvOrderTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
                     android:layout_marginEnd="10dp"
                     android:text="10:00" />
 
                 <TextView
-                    android:id="@+id/tvOrderItems"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/tvOrderStatus"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:text="5" />
+                    android:text="Placed" />
+
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/linearLayout4"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -74,6 +82,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Card" />
+
+                <TextView
+                    android:id="@+id/tvOrderItems"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="5" />
 
                 <TextView
                     android:id="@+id/tvOrderPrice"

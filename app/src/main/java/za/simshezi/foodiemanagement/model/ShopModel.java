@@ -133,6 +133,7 @@ public class ShopModel implements Serializable {
     public static class Order implements Serializable {
         private String id;
         private String shopId;
+        private String shopName;
         private String customer;
         private String cellphone;
         private String payment;
@@ -144,6 +145,7 @@ public class ShopModel implements Serializable {
         public Order(OrderModel order) {
             this.id = order.getId();
             this.shopId = order.getShopId();
+            this.shopName = order.getShopName();
             this.customer = order.getCustomer();
             this.cellphone = order.getCellphone();
             this.payment = order.getPayment();
@@ -167,6 +169,14 @@ public class ShopModel implements Serializable {
 
         public void setShopId(String shopId) {
             this.shopId = shopId;
+        }
+
+        public String getShopName() {
+            return shopName;
+        }
+
+        public void setShopName(String shopName) {
+            this.shopName = shopName;
         }
 
         public String getCustomer() {

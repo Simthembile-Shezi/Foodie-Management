@@ -7,6 +7,7 @@ import java.io.Serializable;
 public class OrderModel implements Serializable {
     private String id;
     private String shopId;
+    private String shopName;
     private String customer;
     private String cellphone;
     private String payment;
@@ -19,34 +20,20 @@ public class OrderModel implements Serializable {
     public OrderModel() {
     }
 
-    public OrderModel(String shopId, String customer, String cellphone, String payment, Timestamp time, Integer items, Double price) {
-        this.shopId = shopId;
-        this.customer = customer;
-        this.cellphone = cellphone;
-        this.payment = payment;
-        this.time = time;
-        this.items = items;
-        this.price = price;
-    }
-
-    public OrderModel(String shopId, String customer, String cellphone, String payment, Timestamp time, Integer items, Double price, String review, Integer rating) {
-        this.shopId = shopId;
-        this.customer = customer;
-        this.cellphone = cellphone;
-        this.payment = payment;
-        this.time = time;
-        this.items = items;
-        this.price = price;
-        this.review = review;
-        this.rating = rating;
-    }
-
     public String getShopId() {
         return shopId;
     }
 
     public void setShopId(String shopId) {
         this.shopId = shopId;
+    }
+
+    public String getShopName() {
+        return shopName;
+    }
+
+    public void setShopName(String shopName) {
+        this.shopName = shopName;
     }
 
     public String getCustomer() {

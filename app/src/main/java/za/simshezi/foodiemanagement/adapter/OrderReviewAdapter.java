@@ -3,6 +3,7 @@ package za.simshezi.foodiemanagement.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,13 +16,10 @@ import za.simshezi.foodiemanagement.api.JavaAPI;
 import za.simshezi.foodiemanagement.model.OrderModel;
 
 public class OrderReviewAdapter extends RecyclerView.Adapter<OrderReviewAdapter.OrderReviewViewHolder> {
-    public OrderModel model;
     private List<OrderModel> list;
-    private View.OnClickListener onClickListener;
 
-    public OrderReviewAdapter(List<OrderModel> list, View.OnClickListener onClickListener) {
+    public OrderReviewAdapter(List<OrderModel> list) {
         this.list = list;
-        this.onClickListener = onClickListener;
     }
 
     @NonNull
@@ -36,10 +34,6 @@ public class OrderReviewAdapter extends RecyclerView.Adapter<OrderReviewAdapter.
     public void onBindViewHolder(@NonNull OrderReviewAdapter.OrderReviewViewHolder holder, int position) {
         OrderModel model = list.get(position);
         holder.setOrderReview(model);
-        holder.itemView.setOnClickListener((view -> {
-            this.model = list.get(position);
-            onClickListener.onClick(view);
-        }));
     }
 
     @Override
@@ -48,8 +42,8 @@ public class OrderReviewAdapter extends RecyclerView.Adapter<OrderReviewAdapter.
     }
 
     public static class OrderReviewViewHolder extends RecyclerView.ViewHolder {
-        private OrderModel model;
         private TextView tvOrderCellphoneNo, tvName, tvPayment, tvPrice, tvTime, tvItems, tvRating, tvReview;
+        private ImageView imgStar;
         public OrderReviewViewHolder(@NonNull View itemView) {
             super(itemView);
             tvOrderCellphoneNo = itemView.findViewById(R.id.tvReviewOrderCellphone);
@@ -60,17 +54,26 @@ public class OrderReviewAdapter extends RecyclerView.Adapter<OrderReviewAdapter.
             tvItems = itemView.findViewById(R.id.tvReviewOrderItems);
             tvRating = itemView.findViewById(R.id.tvReviewOrderRating);
             tvReview = itemView.findViewById(R.id.tvReviewOrderDetails);
+            imgStar = itemView.findViewById(R.id.imgStar);
         }
         public void setOrderReview(OrderModel model) {
-            this.model = model;
             tvOrderCellphoneNo.setText(model.getCellphone());
             tvName.setText(model.getCustomer());
             tvTime.setText(JavaAPI.getDate(model.getTime()));
             tvPayment.setText(model.getPayment());
-            tvReview.setText(model.getReview());
-            tvRating.setText(String.format("%d", model.getRating()));
-            tvItems.setText(String.format("%d items", model.getItems()));
+            tvItems.setText(String.format("%s items", model.getItems()));
             tvPrice.setText(String.format("R %s", JavaAPI.formatDouble(model.getPrice())));
+            if(model.getReview() == null){
+                tvReview.setVisibility(View.GONE);
+                imgStar.setVisibility(View.GONE);
+            }else {
+                tvReview.setText(model.getReview());
+            }
+            if(model.getRating() == null){
+                tvRating.setVisibility(View.GONE);
+            }else {
+                tvRating.setText(String.format("%s", model.getRating()));
+            }
         }
     }
 }
