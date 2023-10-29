@@ -4,12 +4,13 @@ import com.google.firebase.Timestamp;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class JavaAPI {
     public static String getTime(Timestamp timestamp) {
         if(timestamp != null) {
             Date date = timestamp.toDate();
-            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
             return sdf.format(date);
         }else {
             return null;
@@ -19,7 +20,7 @@ public class JavaAPI {
     public static String getDate(Timestamp timestamp) {
         if(timestamp != null) {
             Date date = timestamp.toDate();
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
             return sdf.format(date);
         }else {
             return null;
@@ -27,7 +28,7 @@ public class JavaAPI {
     }
 
     public static Timestamp getTimestamp(String timestamp) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         try {
             Date date = sdf.parse(timestamp);
             assert date != null;

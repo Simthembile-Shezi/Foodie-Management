@@ -4,15 +4,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.CalendarView;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import za.simshezi.foodiemanagement.adapter.IngredientAdapter;
@@ -28,7 +35,8 @@ public class PromotionsActivity extends AppCompatActivity {
     private FirebaseAPI api;
     private PromotionAdapter adapter;
     private RecyclerView lstPromotions;
-    private EditText edPromoCode, edDiscount, edStart, edEnd, edMinimum;
+    private EditText edPromoCode, edDiscount, edMinimum,  edStart, edEnd;
+    private long start, end;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +54,12 @@ public class PromotionsActivity extends AppCompatActivity {
     }
 
     private void build() {
+        edEnd.setEnabled(false);
+        edStart.setEnabled(false);
+        adapter = new PromotionAdapter();
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        lstPromotions.setAdapter(adapter);
+        lstPromotions.setLayoutManager(layoutManager);
         api = FirebaseAPI.getInstance();
         api.getPromotions(shop.getId(), queryDocumentSnapshots -> {
             if (queryDocumentSnapshots != null) {
@@ -56,18 +70,8 @@ public class PromotionsActivity extends AppCompatActivity {
                         adapter.add(promotion);
                     }
                 }
-                update();
-            } else {
-                update();
             }
         });
-    }
-
-    private void update() {
-        adapter = new PromotionAdapter();
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        lstPromotions.setAdapter(adapter);
-        lstPromotions.setLayoutManager(layoutManager);
     }
 
     public void onAddPromo(View view) {
@@ -82,10 +86,10 @@ public class PromotionsActivity extends AppCompatActivity {
             Toast.makeText(this, "Enter discount", Toast.LENGTH_SHORT).show();
         } else if (TextUtils.isEmpty(minimum)) {
             Toast.makeText(this, "Enter minimum", Toast.LENGTH_SHORT).show();
-        } else if (TextUtils.isEmpty(start)) {
-            Toast.makeText(this, "Enter start date", Toast.LENGTH_SHORT).show();
-        } else if (TextUtils.isEmpty(end)) {
-            Toast.makeText(this, "Enter end date", Toast.LENGTH_SHORT).show();
+        }else if (TextUtils.isEmpty(start)) {
+            Toast.makeText(this, "Select start date", Toast.LENGTH_SHORT).show();
+        }else if (TextUtils.isEmpty(end)) {
+            Toast.makeText(this, "Select end date", Toast.LENGTH_SHORT).show();
         } else {
             PromotionModel model = new PromotionModel(shop.getId(), promoCode, Double.parseDouble(discount),
                     Double.parseDouble(minimum), JavaAPI.getTimestamp(start), JavaAPI.getTimestamp(end));
@@ -102,5 +106,33 @@ public class PromotionsActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    public void onSelectEndDate(View view) {
+        showInputDialog(edEnd);
+    }
+
+    public void onSelectStartDate(View view) {
+        showInputDialog(edStart);
+    }
+    private void showInputDialog(EditText view) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.calender_popup_layout, null);
+        dialogBuilder.setView(dialogView);
+
+        CalendarView calendar = dialogView.findViewById(R.id.calenderPopup);
+        ImageButton btnConfirm = dialogView.findViewById(R.id.btnDateConfirm);
+
+        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
+        calendar.setOnDateChangeListener((v, year, month, day) -> {
+            Calendar selectedDateCalendar = Calendar.getInstance();
+            selectedDateCalendar.set(year, month, day);
+            Date selectedDate = selectedDateCalendar.getTime();
+            Timestamp timestamp = new Timestamp(selectedDate);
+            view.setText(JavaAPI.getDate(timestamp));
+        });
+        btnConfirm.setOnClickListener(v -> alertDialog.dismiss());
     }
 }

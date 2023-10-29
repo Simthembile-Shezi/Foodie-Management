@@ -15,8 +15,9 @@ import za.simshezi.foodiemanagement.R;
 import za.simshezi.foodiemanagement.api.JavaAPI;
 import za.simshezi.foodiemanagement.model.PromotionModel;
 
-public class PromotionAdapter extends RecyclerView.Adapter<PromotionAdapter.PromotionViewHolder>{
+public class PromotionAdapter extends RecyclerView.Adapter<PromotionAdapter.PromotionViewHolder> {
     private List<PromotionModel> list;
+
     public PromotionAdapter() {
         this.list = new ArrayList<>();
     }
@@ -44,19 +45,23 @@ public class PromotionAdapter extends RecyclerView.Adapter<PromotionAdapter.Prom
         notifyItemInserted(list.size() - 1);
     }
 
-    public static class PromotionViewHolder extends RecyclerView.ViewHolder{
-        private TextView tvPromoCode, tvStartDate, tvEndDate;
+    public static class PromotionViewHolder extends RecyclerView.ViewHolder {
+        private TextView tvPromoCode, tvPromAmount, tvDate;
+
         public PromotionViewHolder(@NonNull View itemView) {
             super(itemView);
             tvPromoCode = itemView.findViewById(R.id.tvDiscountRecyclerCode);
-            tvStartDate = itemView.findViewById(R.id.tvDiscountRecyclerStart);
-            tvEndDate = itemView.findViewById(R.id.tvDiscountRecyclerEnd);
+            tvPromAmount = itemView.findViewById(R.id.tvDiscountRecyclerAmount);
+            tvDate = itemView.findViewById(R.id.tvDiscountRecyclerDate);
         }
 
         public void setPromo(PromotionModel model) {
+            double discount = model.getDiscount();
+            String value = discount < 1 ? (discount * 100) + "%" : String.format("R %.2f", discount);
             tvPromoCode.setText(model.getPromoCode());
-            tvStartDate.setText(JavaAPI.getDate(model.getStart()));
-            tvEndDate.setText(JavaAPI.getDate(model.getEnd()));
+            tvPromAmount.setText(String.format("Spend R %.2f or more then get %s discount", model.getMinimum(), value));
+            tvDate.setText(JavaAPI.getDate(model.getEnd()).concat(" to ")
+                    .concat(JavaAPI.getDate(model.getStart())));
         }
     }
 }
