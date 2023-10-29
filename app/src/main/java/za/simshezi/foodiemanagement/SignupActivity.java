@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -15,6 +16,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,7 +36,9 @@ public class SignupActivity extends AppCompatActivity {
     private static final int GALLERY_REQUEST_CODE = 159;
     private static final int PERMISSION_REQUEST_CODE = 158;
     private ImageView imgShopLogo;
-    private EditText edName, edEmail, edAddress, edCellphone, edPassword;
+    @SuppressLint("UseSwitchCompatOrMaterialCode")
+    private Switch statusSwitch;
+    private EditText edName, edEmail, edAddress, edCellphone, edPassword, edOpenDay, edCloseDay, edOpenTime, edCloseTime;
     private byte[] image = null;
 
     @Override
@@ -45,9 +49,13 @@ public class SignupActivity extends AppCompatActivity {
         edName = findViewById(R.id.edSignupShopName);
         edEmail = findViewById(R.id.edSignupUserEmail);
         edAddress = findViewById(R.id.edSignupAddress);
+        edOpenDay = findViewById(R.id.edOpenDay);
+        edCloseDay = findViewById(R.id.edCloseDay);
+        edOpenTime = findViewById(R.id.edOpenTime);
+        edCloseTime = findViewById(R.id.edClosingTime);
         edCellphone = findViewById(R.id.edSignupUserCellphone);
         edPassword = findViewById(R.id.edSignupUserPassword);
-
+        statusSwitch = findViewById(R.id.switchSignUpStatus);
         mAuth = FirebaseAuth.getInstance();
         imgShopLogo.setImageResource(R.drawable.icon);
     }
@@ -58,16 +66,34 @@ public class SignupActivity extends AppCompatActivity {
 
     public void onSignupClicked(View view) {
         String name = edName.getText().toString().trim();
-        String email = edEmail.getText().toString().trim();
         String address = edAddress.getText().toString().trim();
+        String email = edEmail.getText().toString().trim();
         String cellphone = edCellphone.getText().toString().trim();
         String password = edPassword.getText().toString().trim();
+        String openTime = edOpenTime.getText().toString().trim();
+        String closeTime = edCloseTime.getText().toString().trim();
+        String openDay = edOpenDay.getText().toString().trim();
+        String closeDay = edCloseDay.getText().toString().trim();
+        String status;
+        if (statusSwitch.isChecked()) {
+            status = "Open";
+        } else {
+            status = "Closed";
+        }
         if (TextUtils.isEmpty(name)) {
             Toast.makeText(this, "Enter full name", Toast.LENGTH_SHORT).show();
         } else if (TextUtils.isEmpty(address)) {
-            Toast.makeText(this, "Enter address", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Enter shop physical address", Toast.LENGTH_SHORT).show();
         } else if (TextUtils.isEmpty(email)) {
             Toast.makeText(this, "Enter email address", Toast.LENGTH_SHORT).show();
+        }else if (TextUtils.isEmpty(openTime)) {
+            Toast.makeText(this, "Enter opening time", Toast.LENGTH_SHORT).show();
+        }else if (TextUtils.isEmpty(closeTime)) {
+            Toast.makeText(this, "Enter closing time", Toast.LENGTH_SHORT).show();
+        }else if (TextUtils.isEmpty(openDay)) {
+            Toast.makeText(this, "Enter first day the shop is open", Toast.LENGTH_SHORT).show();
+        }else if (TextUtils.isEmpty(closeDay)) {
+            Toast.makeText(this, "Enter last day the shop is open", Toast.LENGTH_SHORT).show();
         } else if (TextUtils.isEmpty(cellphone)) {
             Toast.makeText(this, "Enter cellphone number", Toast.LENGTH_SHORT).show();
         } else if (TextUtils.isEmpty(password)) {
@@ -75,15 +101,19 @@ public class SignupActivity extends AppCompatActivity {
         } else if (image == null) {
             Toast.makeText(this, "Choose a picture for your shop", Toast.LENGTH_SHORT).show();
         } else {
+            String days = openDay.concat("-").concat(closeDay);
+            String times = openTime.concat("-").concat(closeTime);
             mAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(SignupActivity.this, task -> {
                         if (task.isSuccessful()) {
-                            ShopModel model = new ShopModel(name, email, cellphone, address, image);
+                            ShopModel model = new ShopModel(name, email, cellphone, status, address,days, times, image);
                             FirebaseAPI.getInstance().saveShop(model, bool -> {
-                                if (!bool) {
-                                    Toast.makeText(SignupActivity.this, "Login and edit shop details", Toast.LENGTH_SHORT).show();
+                                if (bool) {
+                                    Toast.makeText(SignupActivity.this, "Registration successful", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                }else {
+                                    Toast.makeText(SignupActivity.this, "Registration failed.", Toast.LENGTH_SHORT).show();
                                 }
-                                finish();
                             });
                         } else {
                             Toast.makeText(SignupActivity.this, "Registration failed.", Toast.LENGTH_SHORT).show();

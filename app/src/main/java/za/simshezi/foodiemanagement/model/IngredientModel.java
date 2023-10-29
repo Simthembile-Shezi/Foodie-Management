@@ -6,16 +6,16 @@ public class IngredientModel implements Serializable {
     private String id;    //PK
     private String productId;       //FK
     private String name;
+    private String measure;
     private Double price;
     private Integer count;
 
     public IngredientModel() {
     }
 
-    public IngredientModel(String productId, String name, Double price) {
-        this.id = productId + name.replace(" ", "0");
+    public IngredientModel(String name, String measure) {
+        this.measure = measure;
         this.name = name;
-        this.price = price;
     }
 
     public String getName() {
@@ -58,5 +58,13 @@ public class IngredientModel implements Serializable {
 
     public void setProductId(String productId) {
         this.productId = productId;
+    }
+
+    public String getMeasure() {
+        return measure;
+    }
+
+    public void setMeasure(String measure) {
+        this.measure = measure;
     }
 }

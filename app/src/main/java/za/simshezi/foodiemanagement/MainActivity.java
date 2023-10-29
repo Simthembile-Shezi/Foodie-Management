@@ -24,6 +24,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.io.InputStream;
+import java.util.Objects;
 
 import za.simshezi.foodiemanagement.api.FirebaseAPI;
 import za.simshezi.foodiemanagement.api.ImagesAPI;
@@ -44,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         bottomNavigationView = findViewById(R.id.bottom_nav_view);
         bottomNavigationView.setOnItemSelectedListener(this);
         ShopModel model = (ShopModel) getIntent().getSerializableExtra("shop");
-        switch (model.getDest()) {
+        switch (Objects.requireNonNull(model).getDest()) {
             case 0: {
                 bottomNavigationView.setSelectedItemId(R.id.current_orders_dest);
                 break;

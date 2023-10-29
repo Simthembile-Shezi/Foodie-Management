@@ -92,7 +92,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             tvPayment.setText(model.getPayment());
             tvStatus.setText(model.getStatus());
             tvItems.setText(String.format("%s items", model.getItems()));
-            tvPrice.setText(String.format("R %s", JavaAPI.formatDouble(model.getPrice())));
+            tvPrice.setText(String.format("R %.2f", model.getPrice()));
         }
     }
 }

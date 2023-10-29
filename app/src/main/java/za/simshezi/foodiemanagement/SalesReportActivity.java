@@ -34,7 +34,7 @@ public class SalesReportActivity extends AppCompatActivity {
                     }
                 }
             }
-            tvIncome.setText(String.format("R %s", JavaAPI.formatDouble(income)));
+            tvIncome.setText(String.format("R %.2f", income));
         });
     }
 

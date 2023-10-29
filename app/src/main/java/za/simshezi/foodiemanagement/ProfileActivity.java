@@ -34,7 +34,7 @@ public class ProfileActivity extends AppCompatActivity {
     private ImageView imgShopLogo;
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     private Switch statusSwitch;
-    private EditText edName, edAddress, edCellphone;
+    private EditText edName, edAddress, edCellphone, edOpenDay, edCloseDay, edOpenTime, edCloseTime;
     private byte[] image = null;
     private ShopModel model = null;
     private FirebaseAPI api;
@@ -48,31 +48,47 @@ public class ProfileActivity extends AppCompatActivity {
         edName = findViewById(R.id.edProfileShopName);
         edAddress = findViewById(R.id.edProfileShopAddress);
         edCellphone = findViewById(R.id.edProfileUserCellphone);
+        edOpenDay = findViewById(R.id.edProfileOpenDay);
+        edCloseDay = findViewById(R.id.edProfileCloseDay);
+        edOpenTime = findViewById(R.id.edProfileOpenTime);
+        edCloseTime = findViewById(R.id.edProfileClosingTime);
 
         model = (ShopModel) getIntent().getSerializableExtra("shop");
-        edName.setText(model.getName());
-        edAddress.setText(model.getAddress());
-        edCellphone.setText(model.getCellphone());
-        if (model.getStatus().equals("Open")) {
-            statusSwitch.setChecked(true);
+        if(model != null) {
+            String[] days = model.getDays().split("-");
+            String[] times = model.getTimes().split("-");
+            edName.setText(model.getName());
+            edAddress.setText(model.getAddress());
+            edCellphone.setText(model.getCellphone());
+            edOpenDay.setText(days[0]);
+            edCloseDay.setText(days[1]);
+            edOpenTime.setText(times[0]);
+            edCloseTime.setText(times[1]);
+            if (model.getStatus().equals("Open")) {
+                statusSwitch.setChecked(true);
+            }
+            api = FirebaseAPI.getInstance();
+            api.getShopLogo(model.getId(), bytes -> {
+                model.setImage(bytes);
+                image = model.getImage();
+                imgShopLogo.setImageBitmap(ImagesAPI.convertToBitmap(image));
+            });
         }
-        api = FirebaseAPI.getInstance();
-        api.getShopLogo(model.getId(), bytes -> {
-            model.setImage(bytes);
-            image = model.getImage();
-            imgShopLogo.setImageBitmap(ImagesAPI.convertToBitmap(image));
-        });
     }
 
     public void onProfileConfirmClicked(View view) {
         String name = edName.getText().toString().trim();
         String address = edAddress.getText().toString().trim();
         String cellphone = edCellphone.getText().toString().trim();
+        String openTime = edOpenTime.getText().toString().trim();
+        String closeTime = edCloseTime.getText().toString().trim();
+        String openDay = edOpenDay.getText().toString().trim();
+        String closeDay = edCloseDay.getText().toString().trim();
         String status;
         if (statusSwitch.isChecked()) {
             status = "Open";
         } else {
-            status = "closed";
+            status = "Closed";
         }
         if (TextUtils.isEmpty(name)) {
             Toast.makeText(this, "Enter full name", Toast.LENGTH_SHORT).show();
@@ -80,18 +96,29 @@ public class ProfileActivity extends AppCompatActivity {
             Toast.makeText(this, "Enter address", Toast.LENGTH_SHORT).show();
         } else if (TextUtils.isEmpty(cellphone)) {
             Toast.makeText(this, "Enter cellphone number", Toast.LENGTH_SHORT).show();
+        } else if (TextUtils.isEmpty(openTime)) {
+            Toast.makeText(this, "Enter opening time", Toast.LENGTH_SHORT).show();
+        } else if (TextUtils.isEmpty(closeTime)) {
+            Toast.makeText(this, "Enter closing time", Toast.LENGTH_SHORT).show();
+        } else if (TextUtils.isEmpty(openDay)) {
+            Toast.makeText(this, "Enter first day the shop is open", Toast.LENGTH_SHORT).show();
+        } else if (TextUtils.isEmpty(closeDay)) {
+            Toast.makeText(this, "Enter last day the shop is open", Toast.LENGTH_SHORT).show();
         } else if (image == null) {
             Toast.makeText(this, "Choose a picture for your shop", Toast.LENGTH_SHORT).show();
         } else {
-            ShopModel shop = new ShopModel(model.getId(), name, model.getEmail(), cellphone, model.getRating(), status, address, image);
+            String days = openDay.concat("-").concat(closeDay);
+            String times = openTime.concat("-").concat(closeTime);
+            ShopModel shop = new ShopModel(name, model.getEmail(), cellphone, status, address, days, times, image);
+            shop.setId(model.getId());
             api.editShop(shop, bool -> {
                 if (bool) {
                     shop.setDest(ProfileFragment.PROFILE_REQ);
                     Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
                     intent.putExtra("shop", shop);
                     startActivity(intent);
-                }else {
-                    Toast.makeText(ProfileActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(ProfileActivity.this, "Profile updated failed, try again later", Toast.LENGTH_SHORT).show();
                 }
             });
         }

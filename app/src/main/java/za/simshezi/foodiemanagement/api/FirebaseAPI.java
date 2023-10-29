@@ -16,12 +16,15 @@ import java.util.Map;
 import za.simshezi.foodiemanagement.model.IngredientModel;
 import za.simshezi.foodiemanagement.model.OrderModel;
 import za.simshezi.foodiemanagement.model.ProductModel;
+import za.simshezi.foodiemanagement.model.PromotionModel;
 import za.simshezi.foodiemanagement.model.ShopModel;
 
 public class FirebaseAPI {
     private final StorageReference storageRef;
     private final CollectionReference restaurantsCollection;
     private final CollectionReference ordersCollection;
+    private final CollectionReference promotionsCollection;
+    private final CollectionReference vouchersCollection;
     private static FirebaseAPI firebase;
 
     private FirebaseAPI() {
@@ -29,6 +32,8 @@ public class FirebaseAPI {
         storageRef = FirebaseStorage.getInstance().getReference();
         restaurantsCollection = db.collection("restaurants");
         ordersCollection = db.collection("orders");
+        promotionsCollection = db.collection("promotions");
+        vouchersCollection = db.collection("voucher");
     }
 
     public static FirebaseAPI getInstance() {
@@ -44,7 +49,9 @@ public class FirebaseAPI {
         user.put("cellphone", model.getCellphone());
         user.put("email", model.getEmail());
         user.put("address", model.getAddress());
-        user.put("status", "Closed");
+        user.put("status", model.getStatus());
+        user.put("days", model.getDays());
+        user.put("times", model.getTimes());
         user.put("rating", 0.0);
 
         restaurantsCollection.add(user)
@@ -89,11 +96,26 @@ public class FirebaseAPI {
                 .addOnSuccessListener(bool -> callback.onSuccess(true))
                 .addOnFailureListener(e -> callback.onSuccess(false));
     }
+
+    public void addPromotion(PromotionModel model, OnSuccessListener<Boolean> callback) {
+        Map<String, Object> promotion = new HashMap<>();
+        promotion.put("shopId", model.getShopId());
+        promotion.put("discount", model.getDiscount());
+        promotion.put("minimum", model.getMinimum());
+        promotion.put("start", model.getStart());
+        promotion.put("end", model.getEnd());
+
+        promotionsCollection.document(model.getPromoCode()).set(promotion)
+                .addOnSuccessListener(runnable -> callback.onSuccess(true))
+                .addOnFailureListener(e -> callback.onSuccess(false));
+    }
+
     public void updateOrder(String orderId, String status, OnSuccessListener<Boolean> callback) {
         ordersCollection.document(orderId).update("status", status)
                 .addOnSuccessListener(documentReference -> callback.onSuccess(true))
                 .addOnFailureListener(e -> callback.onSuccess(false));
     }
+
     public void editShop(ShopModel model, OnSuccessListener<Boolean> callback) {
         Map<String, Object> user = new HashMap<>();
         user.put("name", model.getName());
@@ -193,6 +215,11 @@ public class FirebaseAPI {
         executeQuery(query, callback);
     }
 
+    public void getPromotions(String id, OnSuccessListener<QuerySnapshot> callback) {
+        Query query = promotionsCollection.whereEqualTo("shopId", id);
+        executeQuery(query, callback);
+    }
+
     private void executeQuery(Query query, OnSuccessListener<QuerySnapshot> callback) {
         query.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -207,4 +234,5 @@ public class FirebaseAPI {
             }
         });
     }
+
 }

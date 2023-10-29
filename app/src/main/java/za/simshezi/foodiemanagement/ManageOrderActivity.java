@@ -53,7 +53,7 @@ public class ManageOrderActivity extends AppCompatActivity {
         tvPayment.setText(shop.getOrder().getPayment());
         tvETA.setText(shop.getOrder().getTime());
         tvStatus.setText(shop.getOrder().getStatus());
-        tvPrice.setText(String.format("R %s", JavaAPI.formatDouble(shop.getOrder().getPrice())));
+        tvPrice.setText(String.format("R %.2f", shop.getOrder().getPrice()));
         String status = shop.getOrder().getStatus();
         if(status.equals("Placed")){
             btnStatus.setText(R.string.completed);

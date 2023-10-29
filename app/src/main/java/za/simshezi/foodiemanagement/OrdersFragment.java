@@ -18,6 +18,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import za.simshezi.foodiemanagement.adapter.OrderReviewAdapter;
 import za.simshezi.foodiemanagement.api.FirebaseAPI;
@@ -28,6 +29,7 @@ public class OrdersFragment extends Fragment {
     public static final int ORDER_REQ = 3;
     private RecyclerView lstPreviousOrders;
     private TextView tvNoOrderReview;
+    private List<OrderModel> list;
     public OrdersFragment() {
         // Required empty public constructor
     }
@@ -48,7 +50,7 @@ public class OrdersFragment extends Fragment {
         Intent data = requireActivity().getIntent();
         ShopModel model = (ShopModel) data.getSerializableExtra("shop");
         if(model != null){
-            List<OrderModel> list = new ArrayList<>();
+            list = new ArrayList<>();
             FirebaseAPI.getInstance().getOrdersReviews(model.getId(), querySnapshot ->{
                 if(querySnapshot != null){
                     for(DocumentSnapshot document : querySnapshot){
@@ -57,6 +59,8 @@ public class OrdersFragment extends Fragment {
                             list.add(order);
                         }
                     }
+                    list = list.stream().sorted((prev, next) -> next.getTime().compareTo(prev.getTime()))
+                            .collect(Collectors.toList());
                     OrderReviewAdapter adapter = new OrderReviewAdapter(list);
                     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
                     lstPreviousOrders.setAdapter(adapter);

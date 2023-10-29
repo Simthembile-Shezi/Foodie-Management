@@ -62,7 +62,7 @@ public class OrderReviewAdapter extends RecyclerView.Adapter<OrderReviewAdapter.
             tvTime.setText(JavaAPI.getDate(model.getTime()));
             tvPayment.setText(model.getPayment());
             tvItems.setText(String.format("%s items", model.getItems()));
-            tvPrice.setText(String.format("R %s", JavaAPI.formatDouble(model.getPrice())));
+            tvPrice.setText(String.format("R %.2f", model.getPrice()));
             if(model.getReview() == null){
                 tvReview.setVisibility(View.GONE);
                 imgStar.setVisibility(View.GONE);

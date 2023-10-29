@@ -7,16 +7,14 @@ public class RecipeModel {
     private String category;
     private String area;
     private String instructions;
-    private List<String> ingredients;
-    private List<String> measures;
+    private List<IngredientModel> ingredients;
 
-    public RecipeModel(String mealName, String category, String area, String instructions, List<String> ingredients, List<String> measures) {
+    public RecipeModel(String mealName, String category, String area, String instructions, List<IngredientModel> ingredients) {
         this.mealName = mealName;
         this.category = category;
         this.area = area;
         this.instructions = instructions;
         this.ingredients = ingredients;
-        this.measures = measures;
     }
 
     public String getMealName() {
@@ -51,19 +49,11 @@ public class RecipeModel {
         this.instructions = instructions;
     }
 
-    public List<String> getIngredients() {
+    public List<IngredientModel> getIngredients() {
         return ingredients;
     }
 
-    public void setIngredients(List<String> ingredients) {
+    public void setIngredients(List<IngredientModel> ingredients) {
         this.ingredients = ingredients;
-    }
-
-    public List<String> getMeasures() {
-        return measures;
-    }
-
-    public void setMeasures(List<String> measures) {
-        this.measures = measures;
     }
 }

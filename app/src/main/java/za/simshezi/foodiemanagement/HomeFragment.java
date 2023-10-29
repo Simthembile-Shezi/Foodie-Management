@@ -20,7 +20,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import za.simshezi.foodiemanagement.adapter.OrderAdapter;
 import za.simshezi.foodiemanagement.api.FirebaseAPI;
@@ -72,6 +74,8 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
                             list.add(model);
                         }
                     }
+                    list = list.stream().sorted(Comparator.comparing(OrderModel::getTime))
+                            .collect(Collectors.toList());
                     adapter = new OrderAdapter(list, (modelView -> {
                         OrderModel order = (OrderModel) modelView;
                         Intent send = new Intent(requireActivity(), ManageOrderActivity.class);

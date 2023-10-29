@@ -14,6 +14,8 @@ public class ShopModel implements Serializable {
     private String cellphone;
     private Double rating;
     private String status;
+    private String days;
+    private String times;
     private String address;
     private byte[] image;
     private int dest;
@@ -23,22 +25,15 @@ public class ShopModel implements Serializable {
     public ShopModel() {
     }
 
-    public ShopModel(String id, String name, String email, String cellphone, Double rating, String status, String address, byte[] image) {
-        this.id = id;
+    public ShopModel(String name, String email, String cellphone, String status, String address, String days, String times, byte[] image) {
         this.name = name;
         this.email = email;
         this.cellphone = cellphone;
-        this.rating = rating;
+        this.rating = 0.0;
         this.status = status;
         this.address = address;
-        this.image = image;
-    }
-
-    public ShopModel(String name, String email, String cellphone, String address, byte[] image) {
-        this.name = name;
-        this.email = email;
-        this.cellphone = cellphone;
-        this.address = address;
+        this.times = times;
+        this.days = days;
         this.image = image;
     }
 
@@ -96,6 +91,22 @@ public class ShopModel implements Serializable {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getDays() {
+        return days;
+    }
+
+    public void setDays(String days) {
+        this.days = days;
+    }
+
+    public String getTimes() {
+        return times;
+    }
+
+    public void setTimes(String times) {
+        this.times = times;
     }
 
     public byte[] getImage() {

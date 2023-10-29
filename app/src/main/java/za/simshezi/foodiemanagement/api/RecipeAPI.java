@@ -13,6 +13,7 @@ import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import za.simshezi.foodiemanagement.model.IngredientModel;
 import za.simshezi.foodiemanagement.model.RecipeModel;
 
 public class RecipeAPI {
@@ -48,22 +49,20 @@ public class RecipeAPI {
                     String category = meal.path("strCategory").asText();
                     String area = meal.path("strArea").asText();
                     String instructions = meal.path("strInstructions").asText();
-                    List<String> ingredients = new ArrayList<>();
-                    List<String> measures = new ArrayList<>();
+                    List<IngredientModel> ingredients = new ArrayList<>();
                     int count = 1;
                     while(true){
                         String ingredient = meal.path("strIngredient"+count).asText();
                         String measure = meal.path("strMeasure"+count).asText();
 
-                        if(ingredient == null || !ingredient.isEmpty()){
+                        if(ingredient == null || ingredient.isEmpty()){
                             break;
                         }else {
-                            ingredients.add(ingredient);
-                            measures.add(measure);
+                            ingredients.add(new IngredientModel(ingredient, measure));
                         }
                         ++count;
                     }
-                    RecipeModel recipe = new RecipeModel(mealName, category, area, instructions, ingredients, measures);
+                    RecipeModel recipe = new RecipeModel(mealName, category, area, instructions, ingredients);
                     callback.onSuccess(recipe);
                 } catch (Exception e) {
                     callback.onSuccess(null);

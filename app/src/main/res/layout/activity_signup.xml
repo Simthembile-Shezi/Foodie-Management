@@ -5,9 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SignupActivity">
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/btnSignupConfirm"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,95 +24,123 @@
 
         <ImageView
             android:id="@+id/imgSignupShopLogo"
-            android:layout_width="100sp"
-            android:layout_height="100sp"
+            android:layout_width="160sp"
+            android:layout_height="160sp"
             android:contentDescription="@string/shop_logo"
             android:maxWidth="200sp"
             android:maxHeight="200sp"
             android:onClick="onSignupShopLogoClicked"
-            tools:srcCompat="@tools:sample/avatars" />
-
-        <TextView
-            android:id="@+id/tvSignupShopLogo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/shop_logo"
-            android:textSize="24sp" />
-
-        <TextView
-            android:id="@+id/tvSignupShopName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:text="@string/shop_name" />
+            tools:srcCompat="@drawable/icon" />
 
         <EditText
             android:id="@+id/edSignupShopName"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autofillHints="Full name"
+            android:layout_height="50dp"
             android:ems="10"
             android:hint="@string/shop_name"
             android:inputType="text"
             android:textSize="20sp" />
 
-        <TextView
-            android:id="@+id/tvSignupAddress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:text="Address" />
-
         <EditText
             android:id="@+id/edSignupAddress"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autofillHints="Address"
+            android:layout_height="50dp"
             android:ems="10"
             android:hint="Address"
             android:inputType="text"
             android:textSize="20sp" />
 
-        <TextView
-            android:id="@+id/tvSignupUserEmail"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/email" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView12"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Are you open for business" />
+
+            <Switch
+                android:id="@+id/switchSignUpStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:text="@string/open"
+                tools:ignore="UseSwitchCompatOrMaterialXml" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/edOpenDay"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="First day open"
+                android:inputType="text" />
+
+            <EditText
+                android:id="@+id/edCloseDay"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="Last day open"
+                android:inputType="text" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/edOpenTime"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="Opens at (7:00)"
+                android:inputType="text" />
+
+            <EditText
+                android:id="@+id/edClosingTime"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="Closes at (21:00)"
+                android:inputType="text" />
+        </LinearLayout>
 
         <EditText
             android:id="@+id/edSignupUserEmail"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:ems="10"
             android:hint="@string/email"
             android:inputType="textEmailAddress"
             android:textSize="20sp" />
 
-        <TextView
-            android:id="@+id/tvSignupUserCellphone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/cellphone_number" />
-
         <EditText
             android:id="@+id/edSignupUserCellphone"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:ems="10"
             android:hint="@string/cellphone_number"
             android:inputType="phone"
             android:textSize="20sp" />
 
-        <TextView
-            android:id="@+id/tvSignupUserPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/password" />
-
         <EditText
             android:id="@+id/edSignupUserPassword"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:ems="10"
             android:hint="@string/password"
             android:inputType="textPassword"
@@ -123,13 +152,16 @@
             android:layout_height="48dp"
             android:onClick="onAlreadySignedClicked"
             android:text="@string/already_have_an_account"
-            android:textSize="30sp" />
+            android:textSize="34sp" />
     </LinearLayout>
 
     <Button
         android:id="@+id/btnSignupConfirm"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
         android:onClick="onSignupClicked"
         android:text="@string/action_signup"
         app:layout_constraintBottom_toBottomOf="parent"
