@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 public class PromotionModel implements Serializable {
     private String shopId;
+    private String shopName;
     private String promoCode;
     private Double discount;
     private Double minimum;
@@ -15,8 +16,9 @@ public class PromotionModel implements Serializable {
     public PromotionModel() {
     }
 
-    public PromotionModel(String shopId, String promoCode, Double discount, Double minimum, Timestamp start, Timestamp end) {
+    public PromotionModel(String shopId, String shopName, String promoCode, Double discount, Double minimum, Timestamp start, Timestamp end) {
         this.shopId = shopId;
+        this.shopName = shopName;
         this.promoCode = promoCode;
         this.discount = discount;
         this.minimum = minimum;
@@ -30,6 +32,14 @@ public class PromotionModel implements Serializable {
 
     public void setShopId(String shopId) {
         this.shopId = shopId;
+    }
+
+    public String getShopName() {
+        return shopName;
+    }
+
+    public void setShopName(String shopName) {
+        this.shopName = shopName;
     }
 
     public String getPromoCode() {

@@ -91,8 +91,9 @@ public class PromotionsActivity extends AppCompatActivity {
         }else if (TextUtils.isEmpty(end)) {
             Toast.makeText(this, "Select end date", Toast.LENGTH_SHORT).show();
         } else {
-            PromotionModel model = new PromotionModel(shop.getId(), promoCode, Double.parseDouble(discount),
-                    Double.parseDouble(minimum), JavaAPI.getTimestamp(start), JavaAPI.getTimestamp(end));
+            PromotionModel model = new PromotionModel(shop.getId(), shop.getName(), promoCode,
+                    Double.parseDouble(discount), Double.parseDouble(minimum),
+                    JavaAPI.getTimestamp(start), JavaAPI.getTimestamp(end));
             api.addPromotion(model, aBoolean -> {
                 if (aBoolean) {
                     adapter.add(model);

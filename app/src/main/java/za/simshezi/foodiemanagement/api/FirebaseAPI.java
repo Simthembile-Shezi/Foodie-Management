@@ -100,6 +100,7 @@ public class FirebaseAPI {
     public void addPromotion(PromotionModel model, OnSuccessListener<Boolean> callback) {
         Map<String, Object> promotion = new HashMap<>();
         promotion.put("shopId", model.getShopId());
+        promotion.put("shopName", model.getShopName());
         promotion.put("discount", model.getDiscount());
         promotion.put("minimum", model.getMinimum());
         promotion.put("start", model.getStart());
