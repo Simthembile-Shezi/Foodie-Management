@@ -214,6 +214,7 @@
 
         <Button
             android:id="@+id/btnSignOut"
+            style="@style/appButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Sign Out"

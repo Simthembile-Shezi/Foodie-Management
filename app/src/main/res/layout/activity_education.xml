@@ -140,6 +140,7 @@
 
     <Button
         android:id="@+id/btnDone"
+        style="@style/appButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="onDoneClicked"

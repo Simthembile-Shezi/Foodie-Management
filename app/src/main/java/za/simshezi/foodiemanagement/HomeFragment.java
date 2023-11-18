@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -33,6 +34,7 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
     public static final int HOME_REQ = 0;
     private RecyclerView lstCurrentOrders;
     private ConstraintLayout layoutOrders, layoutNoOrders;
+    private LinearLayout searchViewHolder;
     private SearchView searchView;
     private FloatingActionButton btnRefresh;
     private OrderAdapter adapter;
@@ -56,6 +58,7 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
         btnRefresh = view.findViewById(R.id.btnHomeRefresh);
         layoutOrders = view.findViewById(R.id.layoutHomeOrders);
         layoutNoOrders = view.findViewById(R.id.layoutNoOrders);
+        searchViewHolder = view.findViewById(R.id.searchViewHolder);
         build();
     }
 
@@ -89,6 +92,7 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
 
                     searchView.setOnQueryTextListener(HomeFragment.this);
                     btnRefresh.setOnClickListener((view -> build()));
+                    searchViewHolder.setOnClickListener(view -> searchView.setIconified(false));
                 }else {
                     layoutOrders.setVisibility(View.GONE);
                     layoutNoOrders.setVisibility(View.VISIBLE);
